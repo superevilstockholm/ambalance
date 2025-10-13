@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Throwable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -15,7 +16,84 @@ use App\Models\MasterData\Student;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function register(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'nisn' => 'nullable|string|min:10|max:10',
+                'nip' => 'nullable|string|min:18|max:18',
+                'dob' => 'required|date',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:8|max:255|confirmed',
+            ]);
+            $validated['nisn'] = $validated['nisn'] ?? null;
+            $validated['nip'] = $validated['nip'] ?? null;
+            // Empty nisn and nip
+            if (empty($validated['nisn']) && empty($validated['nip'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'NISN/NIP is required'
+                ], 400)->withoutCookie('auth_token', '/');
+            }
+            // Double data nisn and nip
+            if (!empty($validated['nisn']) && !empty($validated['nip'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Please provide only one identifier (NISN for students or NIP for teachers).'
+                ], 400)->withoutCookie('auth_token', '/');
+            }
+            $userModel = null;
+            if (!empty($validated['nisn'])) {
+                $userModel = Student::where('nisn', $validated['nisn'])->first();
+            } else if (!empty($validated['nip'])) {
+                $userModel = Teacher::where('nip', $validated['nip'])->first();
+            }
+            if (!$userModel || empty($userModel)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => (!empty($validated['nisn']) ? 'Student' : 'Teacher') . ' not found'
+                ], 404)->withoutCookie('auth_token', '/');
+            }
+            if ($userModel->user_id && User::where('id', $userModel->user_id)->exists()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User already registered'
+                ], 400)->withoutCookie('auth_token', '/');
+            }
+            // DOB check
+            if (Carbon::parse($validated['dob'])->toDateString() !== Carbon::parse($userModel->dob)->toDateString()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Date of birth does not match'
+                ], 401)->withoutCookie('auth_token', '/');
+            }
+            $user = User::create([
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => empty($validated['nisn']) ? 'teacher' : 'student',
+            ]);
+            $userModel->user_id = $user->id;
+            $userModel->save();
+            return response()->json([
+                'status' => true,
+                'message' => 'Registered successfully'
+            ], 201)->withoutCookie('auth_token', '/');
+        } catch (ValidationException $e) {
+            // Validation error
+            return response()->json([
+                'status' => false,
+                'message' => $e->validator->errors()->first()
+            ], 422)->withoutCookie('auth_token', '/');
+        } catch (Throwable $e) {
+            // Internal server error
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500)->withoutCookie('auth_token', '/');
+        }
+    }
+
+    public function login(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -31,7 +109,7 @@ class AuthController extends Controller
                     'status' => false,
                     'message' => 'NISN/NIP is required'
                 ], 400)->withoutCookie('auth_token', '/');
-            // Double data nisn abn nip
+            // Double data nisn and nip
             } else if (!empty($validated['nisn']) && !empty($validated['nip'])) {
                 return response()->json([
                     'status' => false,
