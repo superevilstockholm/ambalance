@@ -16,7 +16,7 @@ use App\Models\MasterData\Student;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -24,7 +24,15 @@ class AuthController extends Controller
                 'nip' => 'nullable|string|min:18|max:18',
                 'dob' => 'required|date',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|min:8|max:255|confirmed',
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'confirmed',
+                    'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&\-_]).+$/'
+                ]
+            ], [
+                'password.regex' => 'Password must contain at least one lowercase letter a-z, one uppercase letter A-Z, one digit 0-9, and one special character ! @ # $ % & - _.'
             ]);
             $validated['nisn'] = $validated['nisn'] ?? null;
             $validated['nip'] = $validated['nip'] ?? null;
@@ -163,6 +171,23 @@ class AuthController extends Controller
                 'status' => false,
                 'message' => $e->validator->errors()->first()
             ], 422)->withoutCookie('auth_token', '/');
+        } catch (Throwable $e) {
+            // Internal server error
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500)->withoutCookie('auth_token', '/');
+        }
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+        try {
+            $request->user()->tokens()->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'Logout successfully'
+            ], 200)->withoutCookie('auth_token', '/');
         } catch (Throwable $e) {
             // Internal server error
             return response()->json([
