@@ -18,10 +18,22 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'role',
+        'profile_picture'
     ];
+
+    protected $appends = [
+        'profile_picture_url'
+    ];
+
+    public function getProfilePictureUrlAttribute()
+    {
+        return $this->profile_picture
+            ? asset($this->profile_picture)
+            : asset('static/images/default_profile.svg');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
