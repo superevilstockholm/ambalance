@@ -196,4 +196,48 @@ class AuthController extends Controller
             ], 500)->withoutCookie('auth_token', '/');
         }
     }
+
+    public function changePassword(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'old_password' => 'required|string|min:8|max:255',
+                'new_password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'confirmed',
+                    'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&\-_]).+$/'
+                ]
+            ], [
+                'new_password.regex' => 'Password must contain at least one lowercase letter a-z, one uppercase letter A-Z, one digit 0-9, and one special character ! @ # $ % & - _.'
+            ]);
+            $user = $request->user();
+            if (!Hash::check($validated['old_password'], $user->password)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Old password is incorrect'
+                ], 401);
+            }
+            $user->update([
+                'password' => Hash::make($validated['new_password'])
+            ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Change password successfully'
+            ], 200);
+        } catch (ValidationException $e) {
+            // Validation error
+            return response()->json([
+                'status' => false,
+                'message' => $e->validator->errors()->first()
+            ], 422);
+        } catch (Throwable $e) {
+            // Internal server error
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
