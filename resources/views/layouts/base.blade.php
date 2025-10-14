@@ -48,6 +48,6 @@
         <x-footer></x-footer>
     @endif
     {{-- Bootstrap --}}
-    <script src="{{ asset('static/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('static/js/bootstrap.bundle.min.js') }}" defer></script>
 </body>
 </html>
