@@ -25,8 +25,9 @@ class GzipAndMinifyMiddleware
                 '/\s{2,}/', // 2 or more spaces
                 '/\n|\r/', // new line
                 '/<!--.*?-->/', // HTML comments
-                '/\/\*.*?\*\//' // CSS comments
-            ], [' ', '', '', ''], $content);
+                '/\/\*.*?\*\//', // CSS comments
+                '/\/\*.*?\*\//', // JS Comments /* ... */
+            ], [' ', '', '', '', ''], $content);
 
             // Gzip
             if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
