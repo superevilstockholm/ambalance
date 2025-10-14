@@ -8,7 +8,7 @@
     <div class="container h-100">
         <div class="row h-100 align-items-center justify-content-center">
             <div class="col-12 col-md-8 col-lg-5 py-3">
-                <div class="card border-0 shadow py-4 p px-md-4">
+                <div class="card border-0 py-4 p px-md-4">
                     <div class="card-body text-center">
                         <img style="max-height: 150px;" class="mb-4 w-100" src="{{ asset('static/images/vectors/undraw_savings.svg') }}" alt="Ambalance logo" fetchpriority="high">
                         <h2 class="fw-bold mb-2">Welcome Back</h2>
@@ -38,7 +38,7 @@
     <div class="container h-100">
         <div class="row h-100 align-items-center justify-content-center">
             <div class="col-12 col-md-8 col-lg-5 py-3">
-                <div class="card border-0 shadow py-4 p px-md-4">
+                <div class="card border-0 py-4 p px-md-4">
                     <div class="card-body text-center">
                         <img style="max-height: 150px;" loading="lazy" class="mb-4 w-100" src="{{ asset('static/images/vectors/undraw_savings.svg') }}" alt="Ambalance logo">
                         <h2 class="fw-bold mb-2">Welcome Back</h2>
