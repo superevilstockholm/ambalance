@@ -34,6 +34,8 @@
     <link rel="stylesheet" href="{{ asset('static/css/style.css') }}">
 </head>
 <body class="h-100">
+    {{-- Custom Script --}}
+    <script>function getAuthToken() { const token = document.cookie.replace(/(?:(?:^|.*;\s*)auth_token\s*\=\s*([^;]*).*$)|^.*$/, '$1'); return token ? decodeURIComponent(token) : null; }</script>
     {{-- Axios --}}
     <script src="{{ asset('static/js/axios.min.js') }}" defer></script>
     {{-- Sweet Alert 2 --}}

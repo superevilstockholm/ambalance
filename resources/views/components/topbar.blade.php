@@ -77,7 +77,7 @@
                 <li class="dropdown pc-h-item header-user-profile">
                     <a class="pc-head-link head-link-primary dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
                         href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="{{ asset('static/images/default_profile.svg') }}" alt="user-image"
+                        <img id="userProfilePicture" src="{{ asset('static/images/default_profile.svg') }}" alt="user-image"
                             class="user-avtar" />
                         <span>
                             <i class="ti ti-settings"></i>
@@ -85,9 +85,9 @@
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header">
-                            <h4>
-                                Good Morning,
-                                <span class="small text-muted" id="userName">User</span>
+                            <h4 class="d-flex align-items-center gap-1">
+                                <span><span id="greeting"></span>,</span>
+                                <span class="small text-muted text-truncate d-inline-block" style="max-width: 120px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="userName">User</span>
                             </h4>
                             <p class="text-muted" id="userRole">Unknown</p>
                             <hr />
@@ -96,10 +96,6 @@
                                 <a href="../application/account-profile-v1.html" class="dropdown-item">
                                     <i class="ti ti-settings"></i>
                                     <span>Account Settings</span>
-                                </a>
-                                <a href="../application/social-profile.html" class="dropdown-item">
-                                    <i class="ti ti-user"></i>
-                                    <span>Social Profile</span>
                                 </a>
                                 <a href="../pages/login-v1.html" class="dropdown-item">
                                     <i class="ti ti-logout"></i>
@@ -113,3 +109,45 @@
         </div>
     </div>
 </header>
+<script>
+    function getGreeting() {
+        const hour = new Date().getHours();
+        let greeting;
+        if (hour >= 5 && hour < 12) {
+            greeting = "Good morning";
+        } else if (hour >= 12 && hour < 17) {
+            greeting = "Good afternoon";
+        } else if (hour >= 17 && hour < 21) {
+            greeting = "Good evening";
+        } else {
+            greeting = "Good night";
+        }
+        return greeting;
+    }
+    document.getElementById('greeting').innerText = getGreeting();
+
+    const userProfilePicture = document.getElementById('userProfilePicture');
+    const userName = document.getElementById('userName');
+    const userRole = document.getElementById('userRole');
+    async function getUserProfileData() {
+        try {
+            const response = await axios.get('/api/me', { headers: {'Authorization': `Bearer ${getAuthToken()}`} });
+            if (response.status === 200 && response.data.status === true) {
+                userProfilePicture.src = response.data.data.profile_picture_url;
+                userName.innerText = response.data.data.fullname;
+                userRole.innerText = response.data.data.role;
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: error.response?.data?.message ?? 'Gagal mengambil data profil pengguna!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    }
+    document.addEventListener('DOMContentLoaded', async () => {
+        await getUserProfileData();
+    });
+</script>

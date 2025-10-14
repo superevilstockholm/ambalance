@@ -12,6 +12,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::patch('/change-password', [AuthController::class, 'changePassword']);
+    Route::get('/me', [AuthController::class, 'getUser']);
 
     // Protectetd - Role: Student
     Route::middleware(['role:student'])->group(function () {
