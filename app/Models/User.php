@@ -8,6 +8,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+// Models
+use App\Models\Savings\Savings;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -58,4 +61,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function savings()
+    {
+        return $this->hasOne(Savings::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            if ($user->role === 'student') {
+                $user->savings()->create([
+                    'amount' => 0,
+                ]);
+            }
+        });
+    }
+
 }
