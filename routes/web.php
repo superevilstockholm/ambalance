@@ -40,13 +40,31 @@ Route::middleware(['optional.auth.sanctum.cookie'])->group(function () {
 Route::middleware(['auth.sanctum.cookie'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         // Protectetd - Role: Student
-        Route::middleware(['role:student'])->group(function () {
-            Route::prefix('student')->group(function () {
-                Route::get('/', function () {
-                    return view('pages.dashboard.student.index');
+        $studentSidebarItems = [
+            'main' => [
+                ['icon' => 'ti ti-dashboard', 'label' => 'Dashboard', 'route' => 'student.dashboard'],
+            ],
+            'tabungan' => [
+                ['icon' => 'ti ti-chart-bar', 'label' => 'Statistik', 'route' => 'student.statistics'],
+                ['icon' => 'ti ti-history', 'label' => 'Tabungan', 'route' => 'student.savings-history']
+            ]
+        ];
+        Route::middleware(['role:student'])->group(function () use ($studentSidebarItems) {
+            Route::prefix('student')->group(function () use ($studentSidebarItems) {
+                Route::get('/', function () use ($studentSidebarItems) {
+                    return view('pages.dashboard.student.index', [
+                        'meta' => ['sidebarItems' => $studentSidebarItems]
+                    ]);
                 })->name('student.dashboard');
-                Route::get('/savings-history', function () {
-                    return view('pages.dashboard.student.savings-history');
+                Route::get('/statistics', function () use ($studentSidebarItems) {
+                    return view('pages.dashboard.student.statistics', [
+                        'meta' => ['sidebarItems' => $studentSidebarItems]
+                    ]);
+                })->name('student.statistics');
+                Route::get('/savings-history', function () use ($studentSidebarItems) {
+                    return view('pages.dashboard.student.savings-history', [
+                        'meta' => ['sidebarItems' => $studentSidebarItems]
+                    ]);
                 })->name('student.savings-history');
             });
         });

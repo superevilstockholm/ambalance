@@ -5,3 +5,32 @@
 .fs-09 {
     font-size: 0.9rem !important;
 }
+
+@media (min-width: 1025px) {
+    .pc-sidebar.pc-sidebar-hide ~ .pc-footer, .pc-sidebar.pc-sidebar-hide ~ .pc-container {
+        margin-left: 20px !important;
+    }
+}
+
+.pc-footer {
+    margin-top: 85px;
+}
+
+@media (max-width: 575px) {
+    .pc-footer {
+        margin-top: 73px;
+    }
+}
+
+@media (max-width: 476px) {
+    .pc-footer {
+        margin-top: 65px !important;
+    }
+}
+
+/* MD */
+@media (min-width: 768px) {
+    .pc-footer {
+        margin-top: 85px !important;
+    }
+}
