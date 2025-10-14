@@ -131,6 +131,12 @@ class AuthController extends Controller
             } else if (!empty($validated['nip'])) {
                 $userModel = Teacher::where('nip', $validated['nip'])->first();
             }
+            if (empty($userModel->user_id)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => ($validated['nisn'] ? 'NISN' : 'NIP') . ' or password is incorrect'
+                ]);
+            }
             // Get user
             $user = User::where('id', $userModel->user_id)->first();
             if (!$userModel || !$user) {

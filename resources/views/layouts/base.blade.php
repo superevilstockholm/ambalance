@@ -32,9 +32,9 @@
 </head>
 <body>
     {{-- Axios --}}
-    <script src="{{ asset('static/js/axios.min.js') }}"></script>
+    <script src="{{ asset('static/js/axios.min.js') }}" defer></script>
     {{-- Sweet Alert 2 --}}
-    <script src="{{ asset('static/js/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('static/js/sweetalert2.min.js') }}" defer></script>
     {{-- Navbar --}}
     @if ($meta['showNavbar'] ?? true)
         <x-navbar></x-navbar>
