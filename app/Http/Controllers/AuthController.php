@@ -135,7 +135,7 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => ($validated['nisn'] ? 'NISN' : 'NIP') . ' or password is incorrect'
-                ]);
+                ], 401);
             }
             // Get user
             $user = User::where('id', $userModel->user_id)->first();
@@ -143,7 +143,7 @@ class AuthController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => ($validated['nisn'] ? 'NISN' : 'NIP') . ' or password is incorrect'
-                ], 404)->withoutCookie('auth_token', '/');
+                ], 401)->withoutCookie('auth_token', '/');
             }
             // Check password
             if (!Hash::check($validated['password'], $user->password)) {
@@ -203,7 +203,7 @@ class AuthController extends Controller
         }
     }
 
-    public function changePassword(Request $request)
+    public function changePassword(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -238,6 +238,34 @@ class AuthController extends Controller
                 'status' => false,
                 'message' => $e->validator->errors()->first()
             ], 422);
+        } catch (Throwable $e) {
+            // Internal server error
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getUser(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $fullname = null;
+            if ($user->role === 'student') {
+                $fullname = Student::select('name')->where('user_id', $user->id)->first()->name;
+            } else if ($user->role === 'teacher') {
+                $fullname = Teacher::select('name')->where('user_id', $user->id)->first()->name;
+            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Get user successfully',
+                'data' => [
+                    'fullname' => $fullname,
+                    'role' => $user->role,
+                    'profile_picture_url' => $user->profile_picture_url
+                ]
+            ], 200);
         } catch (Throwable $e) {
             // Internal server error
             return response()->json([
