@@ -10,7 +10,7 @@
             <div class="col-12 col-md-8 col-lg-5 py-3">
                 <div class="card border-0 shadow py-4 p px-md-4">
                     <div class="card-body text-center">
-                        <img style="height: 150px;" class="mb-4" src="{{ asset('static/images/vectors/undraw_savings.svg') }}" alt="Ambalance logo" fetchpriority="high">
+                        <img style="max-height: 150px;" class="mb-4 w-100" src="{{ asset('static/images/vectors/undraw_savings.svg') }}" alt="Ambalance logo" fetchpriority="high">
                         <h2 class="fw-bold mb-2">Welcome Back</h2>
                         <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">Selamat datang kembali siswa, silahkan masuk dengan akun <a class="text-primary text-decoration-none fw-bold" href="{{ route('index') }}">Ambalance</a> kamu</p>
                         <form method="POST" id="studentForm">
@@ -40,7 +40,7 @@
             <div class="col-12 col-md-8 col-lg-5 py-3">
                 <div class="card border-0 shadow py-4 p px-md-4">
                     <div class="card-body text-center">
-                        <img style="height: 150px;" loading="lazy" class="mb-4" src="{{ asset('static/images/vectors/undraw_savings.svg') }}" alt="Ambalance logo">
+                        <img style="max-height: 150px;" loading="lazy" class="mb-4 w-100" src="{{ asset('static/images/vectors/undraw_savings.svg') }}" alt="Ambalance logo">
                         <h2 class="fw-bold mb-2">Welcome Back</h2>
                         <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">Selamat datang kembali guru, silahkan masuk dengan akun <a class="text-primary text-decoration-none fw-bold" href="{{ route('index') }}">Ambalance</a> kamu</p>
                         <form method="POST" id="teacherForm">
@@ -64,10 +64,6 @@
     </div>
 </section>
 <script>
-    /* Forms */
-    const studentForm = document.getElementById('studentForm');
-    const teacherForm = document.getElementById('teacherForm');
-
     async function login(type, identifier, password) {
         try {
             const payload = {};
@@ -102,13 +98,13 @@
         }
     }
 
-    studentForm.addEventListener('submit', async (e) => {
+    document.getElementById('studentForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const nisn = e.target.nisn.value;
         const password = e.target.studentPassword.value;
         await login('student', nisn, password);
     });
-    teacherForm.addEventListener('submit', async (e) => {
+    document.getElementById('teacherForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const nip = e.target.nip.value;
         const password = e.target.teacherPassword.value;
@@ -124,13 +120,11 @@
         const teacherContainer = document.getElementById('teacherContainer');
 
         function showStudent() {
-            console.log("Student Clicked");
             studentContainer.classList.remove('d-none');
             teacherContainer.classList.add('d-none');
         }
 
         function showTeacher() {
-            console.log("Teacher Clicked");
             studentContainer.classList.add('d-none');
             teacherContainer.classList.remove('d-none');
         }

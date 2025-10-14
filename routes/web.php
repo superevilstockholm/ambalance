@@ -27,7 +27,12 @@ Route::middleware(['optional.auth.sanctum.cookie'])->group(function () {
         if ($request->user()) {
             return redirect(route($request->user()->role . '.dashboard'));
         }
-
+        return response()->view('pages.auth.register', [
+            'meta' => [
+                'showNavbar' => false,
+                'showFooter' => false
+            ]
+        ])->withoutCookie('auth_token', '/');
     })->name('register');
 });
 
@@ -38,10 +43,10 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
         Route::middleware(['role:student'])->group(function () {
             Route::prefix('student')->group(function () {
                 Route::get('/', function () {
-
+                    return view('pages.dashboard.student.index');
                 })->name('student.dashboard');
                 Route::get('/savings-history', function () {
-
+                    return view('pages.dashboard.student.savings-history');
                 })->name('student.savings-history');
             });
         });
@@ -49,10 +54,10 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
         Route::middleware(['role:teacher'])->group(function () {
             Route::prefix('teacher')->group(function () {
                 Route::get('/', function () {
-
+                    return view('pages.dashboard.teacher.index');
                 })->name('teacher.dashboard');
                 Route::get('/students', function () {
-
+                    return view('pages.dashboard.teacher.students');
                 })->name('teacher.students');
             });
         });
@@ -60,7 +65,7 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
         Route::middleware(['role:admin'])->group(function () {
             Route::prefix('admin')->group(function () {
                 Route::get('/', function () {
-
+                    return view('pages.dashboard.admin.index');
                 })->name('admin.dashboard');
                 Route::prefix('master-data')->group(function () {
                     Route::get('/classes', function () {
