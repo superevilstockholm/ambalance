@@ -10,6 +10,10 @@
     .pc-sidebar.pc-sidebar-hide ~ .pc-footer, .pc-sidebar.pc-sidebar-hide ~ .pc-container {
         margin-left: 20px !important;
     }
+
+    .pc-menu-overlay {
+        display: none !important;
+    }
 }
 
 .pc-footer {
