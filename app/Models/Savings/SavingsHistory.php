@@ -3,6 +3,7 @@
 namespace App\Models\Savings;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 // Models
 use App\Models\User;
@@ -10,6 +11,8 @@ use App\Models\Savings\Savings;
 
 class SavingsHistory extends Model
 {
+    use HasFactory;
+
     protected $table = 'savings_history';
 
     protected $fillable = [
@@ -30,5 +33,20 @@ class SavingsHistory extends Model
     public function savings()
     {
         return $this->belongsTo(Savings::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($history) {
+            $savings = $history->savings;
+
+            if ($history->type === 'in') {
+                $savings->amount += $history->amount;
+            } elseif ($history->type === 'out') {
+                $savings->amount -= $history->amount;
+            }
+
+            $savings->save();
+        });
     }
 }
