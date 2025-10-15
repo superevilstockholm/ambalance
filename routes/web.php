@@ -23,6 +23,17 @@ Route::middleware(['optional.auth.sanctum.cookie'])->group(function () {
             ]
         ])->withoutCookie('auth_token', '/');
     })->name('login');
+    Route::get('/admin-login', function (Request $request) {
+        if ($request->user()) {
+            return redirect(route($request->user()->role . '.dashboard'));
+        }
+        return response()->view('pages.auth.admin-login', [
+            'meta' => [
+                'showNavbar' => false,
+                'showFooter' => false
+            ]
+        ])->withoutCookie('auth_token', '/');
+    })->name('admin.login');
     Route::get('/register', function (Request $request) {
         if ($request->user()) {
             return redirect(route($request->user()->role . '.dashboard'));

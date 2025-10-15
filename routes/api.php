@@ -11,7 +11,7 @@ use App\Http\Controllers\DashboardController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::post('/admin/login', [AuthController::class, 'adminLogin']);
+Route::post('/admin-login', [AuthController::class, 'adminLogin']);
 
 // Protected routes
 Route::middleware(['auth:sanctum'])->group(function () {
