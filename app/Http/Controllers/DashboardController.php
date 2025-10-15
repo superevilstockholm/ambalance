@@ -40,6 +40,10 @@ class DashboardController extends Controller
                 $savingsData = Savings::select(['amount'])->where('user_id', $user->id)->first();
                 $totalSavingsInTransactions = SavingsHistory::where('user_id', $user->id)->where('type', 'in')->count('amount');
                 $totalSavingsOutTransactions = SavingsHistory::where('user_id', $user->id)->where('type', 'out')->count('amount');
+
+                $lastFiveInTransactions = SavingsHistory::where('user_id', $user->id)->where('type', 'in')->orderBy('created_at', 'desc')->limit(5)->get();
+                $lastFiveOutTransactions = SavingsHistory::where('user_id', $user->id)->where('type', 'out')->orderBy('created_at', 'desc')->limit(5)->get();
+
                 return response()->json([
                     'status' => true,
                     'message' => 'Get student dashboard data successfully',
@@ -51,6 +55,10 @@ class DashboardController extends Controller
                             'amount' => number_format($savingsData->amount, 0, ',', '.'),
                             'total_in_transactions' => $totalSavingsInTransactions,
                             'total_out_transactions' => $totalSavingsOutTransactions
+                        ],
+                        'last_transactions' => [
+                            'in' => $lastFiveInTransactions,
+                            'out' => $lastFiveOutTransactions
                         ]
                     ]
                 ], 200);
