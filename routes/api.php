@@ -17,9 +17,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('/change-password', [AuthController::class, 'changePassword']);
     Route::get('/me', [AuthController::class, 'getUser']);
 
+    Route::get('/dashboard-data', [DashboardController::class, 'getStudentDashboardData']);
+
     // Protectetd - Role: Student
     Route::middleware(['role:student'])->group(function () {
-        Route::get('/dashboard-data', [DashboardController::class, 'getStudentDashboardData']);
+
     });
 
     // Protectetd - Role: Teacher
