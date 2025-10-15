@@ -97,7 +97,7 @@
                                     <i class="ti ti-settings"></i>
                                     <span>Account Settings</span>
                                 </a>
-                                <a href="../pages/login-v1.html" class="dropdown-item">
+                                <a id="logout-button" href="#" class="dropdown-item">
                                     <i class="ti ti-logout"></i>
                                     <span>Logout</span>
                                 </a>
@@ -149,5 +149,32 @@
     }
     document.addEventListener('DOMContentLoaded', async () => {
         await getUserProfileData();
+    });
+
+    async function logout() {
+        try {
+            const response = await axios.post('/api/logout', {}, { headers: {'Authorization': `Bearer ${getAuthToken()}`} });
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: response.data.message ?? 'Berhasil logout!',
+                showConfirmButton: true,
+                confirmButtonText: 'OK'
+            })
+        } catch (e) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: e.response?.data?.message ?? 'Terjadi kesalahan!',
+                showConfirmButton: true,
+                confirmButtonText: 'OK'
+            })
+        } finally {
+            window.location.href = "{{ route('login') }}";
+        }
+    }
+
+    document.getElementById('logout-button').addEventListener('click', async () => {
+        await logout();
     });
 </script>
