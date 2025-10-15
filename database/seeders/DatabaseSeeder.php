@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\MasterData\Teacher;
 use App\Models\MasterData\Classes;
 use App\Models\MasterData\Student;
+use App\Models\Savings\SavingsHistory;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,5 +41,8 @@ class DatabaseSeeder extends Seeder
         Student::factory(10)->create();
         // Students Without User
         Student::factory(10)->withoutUser()->create();
+
+        // Savings History
+        SavingsHistory::factory(80)->create();
     }
 }

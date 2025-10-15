@@ -6,9 +6,17 @@
     font-size: 0.9rem !important;
 }
 
+.pc-container {
+    background-color: rgb(243, 244, 246) !important;
+}
+
 @media (min-width: 1025px) {
     .pc-sidebar.pc-sidebar-hide ~ .pc-footer, .pc-sidebar.pc-sidebar-hide ~ .pc-container {
         margin-left: 20px !important;
+    }
+
+    .pc-menu-overlay {
+        display: none !important;
     }
 }
 
@@ -24,7 +32,13 @@
 
 @media (max-width: 476px) {
     .pc-footer {
-        margin-top: 65px !important;
+        margin-top: 73px !important;
+    }
+}
+
+@media (max-width: 375px) {
+    .pc-footer {
+        margin-top: 60px !important;
     }
 }
 
@@ -32,5 +46,11 @@
 @media (min-width: 768px) {
     .pc-footer {
         margin-top: 85px !important;
+    }
+}
+
+@media (min-width: 575.99px) {
+    .pc-content {
+        padding-bottom: 20px !important;
     }
 }

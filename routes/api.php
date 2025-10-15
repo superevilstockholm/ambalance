@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 // Auth
 use App\Http\Controllers\AuthController;
 
+// Dashboard
+use App\Http\Controllers\DashboardController;
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
@@ -13,6 +16,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::patch('/change-password', [AuthController::class, 'changePassword']);
     Route::get('/me', [AuthController::class, 'getUser']);
+
+    Route::get('/dashboard-data', [DashboardController::class, 'getStudentDashboardData']);
 
     // Protectetd - Role: Student
     Route::middleware(['role:student'])->group(function () {

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 // Models
 use App\Models\User;
+use App\Models\Savings\SavingsHistory;
 
 class Savings extends Model
 {
@@ -21,5 +22,10 @@ class Savings extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(SavingsHistory::class, 'savings_id');
     }
 }
