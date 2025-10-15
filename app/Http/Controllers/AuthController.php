@@ -186,6 +186,66 @@ class AuthController extends Controller
         }
     }
 
+    public function adminLogin(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|string|min:8|max:255'
+            ]);
+            $user = User::where('email', $validated['email'])->first();
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email or password is incorrect'
+                ], 404)->withoutCookie('auth_token', '/');
+            }
+            if ($user->role !== 'admin') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email or password is incorrect'
+                ], 401)->withoutCookie('auth_token', '/');
+            }
+            if (!Hash::check($validated['password'], $user->password)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email or password is incorrect'
+                ], 401)->withoutCookie('auth_token', '/');
+            }
+            // Delete all old token and create a new one
+            $user->tokens()->delete();
+            $tokenResult = $user->createToken('auth_token');
+            $token = $tokenResult->accessToken;
+            $token->expires_at = Carbon::now()->addDays(7); // 7 days
+            $token->save();
+            $plainToken = $tokenResult->plainTextToken;
+            return response()->json([
+                'status' => true,
+                'message' => 'Login successfully',
+            ], 200, ['x-user-role' => $user->role])->cookie(
+                'auth_token', // name
+                $plainToken, // value
+                60 * 24 * 7, // expiration in minutes - 7 days
+                '/', // path
+                null, // domain
+                false, // secure
+                false, // httponly
+            );
+        } catch (ValidationException $e) {
+            // Validation error
+            return response()->json([
+                'status' => false,
+                'message' => $e->validator->errors()->first()
+            ], 422)->withoutCookie('auth_token', '/');
+        } catch (Throwable $e) {
+            // Internal server error
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500)->withoutCookie('auth_token', '/');
+        }
+    }
+
     public function logout(Request $request): JsonResponse
     {
         try {
