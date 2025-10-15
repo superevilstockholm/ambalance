@@ -60,16 +60,16 @@
         </div>
     </footer>
     {{-- Bootstrap JS --}}
-    <script src="{{ asset('static/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('static/js/bootstrap.bundle.min.js') }}" defer></script>
     {{-- ====== Start Template ====== --}}
     {{-- Popper JS --}}
-    <script src="{{ asset('static/berry_template/js/plugins/popper.min.js') }}"></script>
+    <script src="{{ asset('static/berry_template/js/plugins/popper.min.js') }}" defer></script>
     {{-- Simple Bar JS --}}
-    <script src="{{ asset('static/berry_template/js/plugins/simplebar.min.js') }}"></script>
+    <script src="{{ asset('static/berry_template/js/plugins/simplebar.min.js') }}" defer></script>
     {{-- Feather Icons JS --}}
-    <script src="{{ asset('static/berry_template/js/plugins/feather.min.js') }}"></script>
+    <script src="{{ asset('static/berry_template/js/plugins/feather.min.js') }}" defer></script>
     {{-- Custom Template JS --}}
-    <script src="{{ asset('static/berry_template/js/script.js') }}"></script>
+    <script src="{{ asset('static/berry_template/js/script.js') }}" defer></script>
     {{-- ====== End Template ====== --}}
 </body>
 </html>
