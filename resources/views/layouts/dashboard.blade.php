@@ -53,7 +53,7 @@
             <div class="row justify-content-center">
                 <div class="col-auto">
                     <p class="m-0 text-center">
-                        Copyright &copy; 2025 AmbaToCode. All rights reserved.
+                        Copyright &copy; 2025 <b>AmbaToCode</b>. All rights reserved.
                     </p>
                 </div>
             </div>

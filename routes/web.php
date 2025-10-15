@@ -46,7 +46,7 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
             ],
             'tabungan' => [
                 ['icon' => 'ti ti-chart-bar', 'label' => 'Statistik', 'route' => 'student.statistics'],
-                ['icon' => 'ti ti-history', 'label' => 'Tabungan', 'route' => 'student.savings-history']
+                ['icon' => 'ti ti-history', 'label' => 'Histori', 'route' => 'student.savings-history']
             ]
         ];
         Route::middleware(['role:student'])->group(function () use ($studentSidebarItems) {

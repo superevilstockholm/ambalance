@@ -53,21 +53,42 @@
         </div>
     </div>
     {{-- Last Transactions --}}
-    <div class="row g-3">
+    <div class="row g-3 mb-3 mb-md-4">
         <div class="col-12 col-md-6 mb-0">
             <div class="card border-0 shadow-sm mb-0 rounded-3 p-3 h-100">
                 <h5 class="fw-semibold mb-3">Transaksi Masuk Terakhir</h5>
-                <ul class="list-group list-group-flush" id="lastInTransactions">
-                    <li class="list-group-item text-muted">Belum ada transaksi</li>
+                <ul class="list-group list-group-flush text-muted" id="lastInTransactions">
+                    <li class="list-group-item">Belum ada transaksi</li>
                 </ul>
             </div>
         </div>
         <div class="col-12 col-md-6 mb-0">
             <div class="card border-0 shadow-sm mb-0 rounded-3 p-3 h-100">
                 <h5 class="fw-semibold mb-3">Transaksi Keluar Terakhir</h5>
-                <ul class="list-group list-group-flush" id="lastOutTransactions">
-                    <li class="list-group-item text-muted">Belum ada transaksi</li>
+                <ul class="list-group list-group-flush text-muted" id="lastOutTransactions">
+                    <li class="list-group-item">Belum ada transaksi</li>
                 </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-0">
+            <div class="card border-0 mb-0 shadow-sm rounded-3">
+                <div class="card-body d-flex flex-column gap-3">
+                    <i class="ti ti-clipboard-text fs-1 text-primary"></i>
+                    <div class="d-flex flex-column gap-2">
+                        <h5 class="fw-bold mb-0">Petunjuk</h5>
+                        <small class="text-muted">
+                            <ul class="list-unstyled">
+                                <li>1. Untuk melakukan pembayaran tabungan, silakan temui guru yang bertugas.</li>
+                                <li>2. Guru akan memasukkan jumlah pembayaran ke sistem, yang otomatis tercatat di akun Anda.</li>
+                                <li>3. Setelah pembayaran terinput, Anda dapat memeriksa saldo dan transaksi terbaru di dashboard ini.</li>
+                                <li>4. Gunakan menu Statistik untuk melihat ringkasan tabungan dan menu Riwayat untuk melihat semua histori transaksi Anda.</li>
+                                <li>5. Pastikan selalu memeriksa jumlah yang tercatat agar sesuai dengan pembayaran yang dilakukan.</li>
+                            </ul>
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
