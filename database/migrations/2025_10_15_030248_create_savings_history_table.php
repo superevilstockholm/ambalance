@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('savings', function (Blueprint $table) {
+        Schema::create('savings_history', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('savings_id')
+                ->nullable()
+                ->constrained('savings')
+                ->onDelete('cascade');
             $table->foreignId('user_id')
                 ->nullable()
-                ->unique()
                 ->constrained('users')
                 ->onDelete('cascade');
-            $table->decimal('amount', 10, 2)->default(0);
+            $table->decimal('amount', 15, 2);
+            $table->enum('type', ['in', 'out'])->default('in')->comment('in/out');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('savings');
+        Schema::dropIfExists('savings_history');
     }
 };

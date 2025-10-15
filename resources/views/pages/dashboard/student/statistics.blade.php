@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h1>Dashboard</h1>
+                <h1>Savings Statistics</h1>
             </div>
         </div>
     </div>

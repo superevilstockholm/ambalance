@@ -6,15 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 // Models
 use App\Models\User;
-use App\Models\Savings\SavingsHistory;
+use App\Models\Savings\Savings;
 
-class Savings extends Model
+class SavingsHistory extends Model
 {
-    protected $table = 'savings';
+    protected $table = 'savings_history';
 
     protected $fillable = [
+        'savings_id',
         'user_id',
         'amount',
+        'type', // in / out
+        'description',
     ];
 
     public $timestamps = true;
@@ -24,8 +27,8 @@ class Savings extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function histories()
+    public function savings()
     {
-        return $this->hasMany(SavingsHistory::class, 'savings_id');
+        return $this->belongsTo(Savings::class);
     }
 }
