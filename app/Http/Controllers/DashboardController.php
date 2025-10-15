@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Throwable;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 // Models
 use App\Models\User;
@@ -19,7 +20,7 @@ use App\Models\Savings\SavingsHistory;
 
 class DashboardController extends Controller
 {
-    public function getStudentDashboardData(Request $request)
+    public function getStudentDashboardData(Request $request): JsonResponse
     {
         try {
             $user = $request->user();
@@ -63,8 +64,77 @@ class DashboardController extends Controller
                     ]
                 ], 200);
             }
+            return response()->json([
+                'status' => false,
+                'message' => 'Forbidden'
+            ], 403);
         } catch (Throwable $e) {
             // Internal server error
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500)->withoutCookie('auth_token', '/');
+        }
+    }
+
+    public function getSavingsStatistics(Request $request): JsonResponse
+    {
+        try {
+            $userId = $request->user()->id;
+
+            // Highest transactions
+            $highestIn = SavingsHistory::where('user_id', $userId)->where('type', 'in')->orderBy('amount', 'desc')->first();
+            $highestOut = SavingsHistory::where('user_id', $userId)->where('type', 'out')->orderBy('amount', 'desc')->first();
+
+            // Lowest transactions
+            $lowestIn = SavingsHistory::where('user_id', $userId)->where('type', 'in')->orderBy('amount', 'asc')->first();
+            $lowestOut = SavingsHistory::where('user_id', $userId)->where('type', 'out')->orderBy('amount', 'asc')->first();
+
+            // Averages
+            $avgIn = SavingsHistory::where('user_id', $userId)->where('type', 'in')->avg('amount') ?? 0;
+            $avgOut = SavingsHistory::where('user_id', $userId)->where('type', 'out')->avg('amount') ?? 0;
+
+            // Monthly average in (group by month)
+            $avgInMonthly = SavingsHistory::where('user_id', $userId)
+                ->where('type', 'in')
+                ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, AVG(amount) as avg_amount')
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'asc')
+                ->orderBy('month', 'asc')
+                ->get();
+
+            $avgOutMonthly = SavingsHistory::where('user_id', $userId)
+                ->where('type', 'out')
+                ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, AVG(amount) as avg_amount')
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'asc')
+                ->orderBy('month', 'asc')
+                ->get();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Savings statistics retrieved successfully',
+                'data' => [
+                    'highest' => [
+                        'in' => $highestIn,
+                        'out' => $highestOut
+                    ],
+                    'lowest' => [
+                        'in' => $lowestIn,
+                        'out' => $lowestOut
+                    ],
+                    'average' => [
+                        'in' => $avgIn,
+                        'out' => $avgOut
+                    ],
+                    'monthly_average' => [
+                        'in' => $avgInMonthly,
+                        'out' => $avgOutMonthly
+                    ]
+                ]
+            ], 200);
+
+        } catch (Throwable $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
