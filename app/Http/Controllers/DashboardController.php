@@ -143,4 +143,43 @@ class DashboardController extends Controller
             ], 500)->withoutCookie('auth_token', '/');
         }
     }
+
+    public function getSavingsHistories(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        try {
+            $savingsHistoryQuery = SavingsHistory::query()->where('savings_id', $user->savings->id)->orderBy('id', 'desc');
+
+            // Search
+            $allowedType = ['type', 'description'];
+            $type = $request->query('type');
+
+            if ($type && $type === 'date') {
+                $startDate = $request->query('start_date');
+                $endDate = $request->query('end_date');
+                $savingsHistoryQuery->whereBetween('created_at', [$startDate, $endDate]);
+            } else if ($type && in_array($type, $allowedType)) {
+                $query = $request->query('query');
+                $savingsHistoryQuery->where($type, 'like', '%' . $query . '%');
+            }
+
+            // Limit
+            $limit = $request->query('limit', 10);
+            if ($limit === 'all') {
+                $savingsHistory = $savingsHistoryQuery->get();
+            } else {
+                $savingsHistory = $savingsHistoryQuery->paginate($limit);
+            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Savings history retrieved successfully',
+                'data' => $savingsHistory
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500)->withoutCookie('auth_token', '/');
+        }
+    }
 }
