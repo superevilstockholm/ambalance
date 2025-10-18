@@ -17,6 +17,10 @@ class Savings extends Model
         'amount',
     ];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
     public $timestamps = true;
 
     public function user()

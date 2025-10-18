@@ -24,15 +24,13 @@ class SavingsHistoryFactory extends Factory
 
     public function definition(): array
     {
-        // Ambil random user & savings yang sudah ada (atau buat dummy)
-        $userId = User::inRandomOrder()->first()->id ?? 1;
-        $savingsId = Savings::where('user_id', $userId)->inRandomOrder()->first()->id ?? 1;
-
+        $userId = User::where('role', 'student')->inRandomOrder()->first()->id;
+        $savingsId = Savings::where('user_id', $userId)->first()->id;
         return [
             'savings_id' => $savingsId,
             'user_id' => $userId,
-            'amount' => $this->faker->numberBetween(1000, 500000),
-            'type' => $this->faker->randomElement(['in', 'out']),
+            'amount' => $this->faker->randomFloat(2, 1000, 100000),
+            'type' => $this->faker->randomElement(['in', 'in', 'in', 'out']),
             'description' => $this->faker->sentence(3),
         ];
     }

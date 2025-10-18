@@ -1,7 +1,7 @@
 @extends('layouts.base')
-@section('title', 'Masuk - Ambalance')
-@section('meta-description', 'Masuk ke akun Ambalance kamu untuk melihat dashboard')
-@section('meta-keywords', 'Auth, Login, Authentication, Masuk, Masuk Akun, Siswa, Guru, Student, Teacher')
+@section('title', 'Masuk Admin - Ambalance')
+@section('meta-description', 'Masuk ke akun Admin Ambalance kamu untuk masuk ke menu dashboard')
+@section('meta-keywords', 'Auth, Login, Authentication, Masuk, Masuk Akun, Admin, Administrator')
 @section('content')
 {{-- Student Login --}}
 <section class="vh-100 d-block">
@@ -15,7 +15,7 @@
                         <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">Selamat datang kembali, silahkan masuk dengan akun <a class="text-primary text-decoration-none fw-bold" href="{{ route('index') }}">Ambalance</a> kamu</p>
                         <form method="POST" id="admin-form">
                             <div class="form-floating mb-2">
-                                <input class="form-control fs-09" type="email" name="email" id="email" placeholder="Email" required>
+                                <input class="form-control fs-09" type="email" name="email" id="email" placeholder="Email" autofocus required>
                                 <label class="fs-09" for="email">Email</label>
                             </div>
                             <div class="form-floating mb-2">
