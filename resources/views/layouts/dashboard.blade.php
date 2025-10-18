@@ -45,6 +45,26 @@
     <x-topbar></x-topbar>
     <div class="pc-container">
         <div class="pc-content">
+            <div class="row">
+                <div class="col">
+                    @php
+                        $segments = collect(request()->segments());
+                    @endphp
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            @foreach ($segments as $segment)
+                                @if ($loop->last)
+                                    <li class="breadcrumb-item active" aria-current="page">{{ ucfirst($segment) }}</li>
+                                @else
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ url($segments->slice(0, $loop->index + 1)->implode('/')) }}">{{ ucfirst($segment) }}</a>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ol>
+                    </nav>
+                </div>
+            </div>
             @yield('content')
         </div>
     </div>

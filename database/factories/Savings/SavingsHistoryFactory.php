@@ -51,7 +51,7 @@ class SavingsHistoryFactory extends Factory
         return [
             'savings_id' => $studentSavings->id,
             'user_id' => $teacher->user->id, // id user teacher yang membuat transaksi
-            'amount' => $this->faker->randomFloat(2, 1000, 100000),
+            'amount' => $this->faker->numberBetween(2, 200) * 500,
             'type' => $this->faker->randomElement(['in', 'in', 'in', 'out']),
             'description' => $this->faker->sentence(3),
         ];
