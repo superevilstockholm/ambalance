@@ -114,13 +114,13 @@
         const hour = new Date().getHours();
         let greeting;
         if (hour >= 5 && hour < 12) {
-            greeting = "Good morning";
+            greeting = "Selamat Pagi";
         } else if (hour >= 12 && hour < 17) {
-            greeting = "Good afternoon";
+            greeting = "Selamat Siang";
         } else if (hour >= 17 && hour < 21) {
-            greeting = "Good evening";
+            greeting = "Selamat Sore";
         } else {
-            greeting = "Good night";
+            greeting = "Selamat Malam";
         }
         return greeting;
     }

@@ -38,12 +38,14 @@ class DashboardController extends Controller
                     'name' => $student->name
                 ];
                 $kelasData = $student->class()->select('class_name')->first()->class_name;
-                $savingsData = Savings::select(['amount'])->where('user_id', $user->id)->first();
-                $totalSavingsInTransactions = SavingsHistory::where('user_id', $user->id)->where('type', 'in')->count('amount');
-                $totalSavingsOutTransactions = SavingsHistory::where('user_id', $user->id)->where('type', 'out')->count('amount');
 
-                $lastFiveInTransactions = SavingsHistory::where('user_id', $user->id)->where('type', 'in')->orderBy('created_at', 'desc')->limit(5)->get();
-                $lastFiveOutTransactions = SavingsHistory::where('user_id', $user->id)->where('type', 'out')->orderBy('created_at', 'desc')->limit(5)->get();
+                $savingsData = Savings::select(['id', 'amount'])->where('user_id', $user->id)->first();
+
+                $totalSavingsInTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'in')->count('amount');
+                $totalSavingsOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'out')->count('amount');
+
+                $lastFiveInTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'in')->orderBy('created_at', 'desc')->limit(5)->get();
+                $lastFiveOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'out')->orderBy('created_at', 'desc')->limit(5)->get();
 
                 return response()->json([
                     'status' => true,
@@ -134,6 +136,45 @@ class DashboardController extends Controller
                 ]
             ], 200);
 
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500)->withoutCookie('auth_token', '/');
+        }
+    }
+
+    public function getSavingsHistories(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        try {
+            $savingsHistoryQuery = SavingsHistory::query()->where('savings_id', $user->savings->id)->orderBy('id', 'desc');
+
+            // Search
+            $allowedType = ['type', 'description'];
+            $type = $request->query('type');
+
+            if ($type && $type === 'date') {
+                $startDate = $request->query('start_date');
+                $endDate = $request->query('end_date');
+                $savingsHistoryQuery->whereBetween('created_at', [$startDate, $endDate]);
+            } else if ($type && in_array($type, $allowedType)) {
+                $query = $request->query('query');
+                $savingsHistoryQuery->where($type, 'like', '%' . $query . '%');
+            }
+
+            // Limit
+            $limit = $request->query('limit', 10);
+            if ($limit === 'all') {
+                $savingsHistory = $savingsHistoryQuery->get();
+            } else {
+                $savingsHistory = $savingsHistoryQuery->paginate($limit);
+            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Savings history retrieved successfully',
+                'data' => $savingsHistory
+            ]);
         } catch (Throwable $e) {
             return response()->json([
                 'status' => false,

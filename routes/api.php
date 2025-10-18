@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Protectetd - Role: Student
     Route::middleware(['role:student'])->group(function () {
         Route::get('/savings-statistics', [DashboardController::class, 'getSavingsStatistics']);
+        Route::get('/savings-histories', [DashboardController::class, 'getSavingsHistories']);
     });
 
     // Protectetd - Role: Teacher
