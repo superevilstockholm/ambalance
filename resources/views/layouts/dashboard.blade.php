@@ -53,11 +53,17 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             @foreach ($segments as $segment)
+                                @php
+                                    $displaySegment = str_replace('-', ' ', $segment);
+                                    $displaySegment = ucwords($displaySegment);
+                                @endphp
                                 @if ($loop->last)
-                                    <li class="breadcrumb-item active" aria-current="page">{{ ucfirst($segment) }}</li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ $displaySegment }}</li>
                                 @else
                                     <li class="breadcrumb-item">
-                                        <a href="{{ url($segments->slice(0, $loop->index + 1)->implode('/')) }}">{{ ucfirst($segment) }}</a>
+                                        <a href="{{ url($segments->slice(0, $loop->index + 1)->implode('/')) }}">
+                                            {{ $displaySegment }}
+                                        </a>
                                     </li>
                                 @endif
                             @endforeach
