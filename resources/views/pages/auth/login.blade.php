@@ -77,7 +77,7 @@
                 }
             });
             if (response.status === 200 && response.data.status === true) {
-                window.location.href = `/dashboard/${response.headers['x-user-role']}`;
+                window.location.href = `/${response.headers['x-user-role']}`;
                 return;
             }
             Swal.fire({
