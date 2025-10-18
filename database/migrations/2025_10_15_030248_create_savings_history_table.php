@@ -20,7 +20,8 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained('users')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+                ->comment('User with role teacher who make the transaction');
             $table->decimal('amount', 15, 2);
             $table->enum('type', ['in', 'out'])->default('in')->comment('in/out');
             $table->text('description')->nullable();
