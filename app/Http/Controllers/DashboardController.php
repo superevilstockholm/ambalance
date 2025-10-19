@@ -75,7 +75,7 @@ class DashboardController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 500)->withoutCookie('auth_token', '/');
+            ], 500);
         }
     }
 
@@ -140,7 +140,7 @@ class DashboardController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 500)->withoutCookie('auth_token', '/');
+            ], 500);
         }
     }
 
@@ -148,7 +148,11 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         try {
-            $savingsHistoryQuery = SavingsHistory::query()->where('savings_id', $user->savings->id)->orderBy('id', 'desc');
+            $savingsHistoryQuery = SavingsHistory::query()->where('savings_id', $user->savings->id)->orderBy('id', 'desc')->with([
+                'user.teacher' => function ($query) {
+                    $query->select('id', 'user_id', 'name');
+                }
+            ]);
 
             // Search
             $allowedType = ['type', 'description'];
@@ -170,6 +174,24 @@ class DashboardController extends Controller
             } else {
                 $savingsHistory = $savingsHistoryQuery->paginate($limit);
             }
+
+            $savingsHistory->getCollection()->transform(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'savings_id' => $item->savings_id,
+                    'amount' => $item->amount,
+                    'type' => $item->type,
+                    'description' => $item->description,
+                    'created_at' => $item->created_at,
+                    'teacher' => $item->user && $item->user->teacher
+                        ? [
+                            'id' => $item->user->teacher->id,
+                            'name' => $item->user->teacher->name,
+                        ]
+                        : null,
+                ];
+            });
+
             return response()->json([
                 'status' => true,
                 'message' => 'Savings history retrieved successfully',
@@ -179,7 +201,7 @@ class DashboardController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
-            ], 500)->withoutCookie('auth_token', '/');
+            ], 500);
         }
     }
 }
