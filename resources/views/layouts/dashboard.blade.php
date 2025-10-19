@@ -33,7 +33,7 @@
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('static/css/style.css') }}">
 </head>
-<body class="h-100">
+<body class="h-100" data-pc-preset="preset-1">
     {{-- Custom Script --}}
     <script>function getAuthToken() { const token = document.cookie.replace(/(?:(?:^|.*;\s*)auth_token\s*\=\s*([^;]*).*$)|^.*$/, '$1'); return token ? decodeURIComponent(token) : null; }</script>
     {{-- Axios --}}
@@ -97,5 +97,6 @@
     {{-- Custom Template JS --}}
     <script src="{{ asset('static/berry_template/js/script.js') }}" defer></script>
     {{-- ====== End Template ====== --}}
+    <script src="{{ asset('static/js/chart.js') }}"></script>
 </body>
 </html>

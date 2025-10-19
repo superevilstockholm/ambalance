@@ -87,9 +87,9 @@
                         <div class="dropdown-header">
                             <h4 class="d-flex align-items-center gap-1">
                                 <span><span id="greeting"></span>,</span>
-                                <span class="small text-muted text-truncate d-inline-block" style="max-width: 120px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="userName">User</span>
+                                <span class="small text-muted text-truncate d-inline-block fs-09" style="max-width: 120px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" id="userName">User</span>
                             </h4>
-                            <p class="text-muted" id="userRole">Unknown</p>
+                            <p class="text-muted fs-09" id="userRole">Unknown</p>
                             <hr />
                             <div class="profile-notification-scroll position-relative"
                                 style="max-height: calc(100vh - 280px)">

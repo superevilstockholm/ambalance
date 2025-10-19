@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Throwable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 
 // Models
@@ -24,48 +25,46 @@ class DashboardController extends Controller
     {
         try {
             $user = $request->user();
-            if ($user->role === 'student') {
-                $userData = [
-                    'id' => $user->id,
-                    'email' => $user->email,
-                    'role' => $user->role,
-                    'profile_picture' => $user->profile_picture,
-                    'profile_picture_url' => $user->profile_picture_url
-                ];
-                $student = Student::select(['nisn', 'name', 'class_id'])->where('user_id', $user->id)->first();
-                $studentData = [
-                    'nisn' => $student->nisn,
-                    'name' => $student->name
-                ];
-                $kelasData = $student->class()->select('class_name')->first()->class_name;
+            $userData = [
+                'id' => $user->id,
+                'email' => $user->email,
+                'role' => $user->role,
+                'profile_picture' => $user->profile_picture,
+                'profile_picture_url' => $user->profile_picture_url
+            ];
+            $student = Student::select(['nisn', 'name', 'class_id'])->where('user_id', $user->id)->first();
+            $studentData = [
+                'nisn' => $student->nisn,
+                'name' => $student->name
+            ];
+            $kelasData = $student->class()->select('class_name')->first()->class_name;
 
-                $savingsData = Savings::select(['id', 'amount'])->where('user_id', $user->id)->first();
+            $savingsData = Savings::select(['id', 'amount'])->where('user_id', $user->id)->first();
 
-                $totalSavingsInTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'in')->count('amount');
-                $totalSavingsOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'out')->count('amount');
+            $totalSavingsInTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'in')->count('amount');
+            $totalSavingsOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'out')->count('amount');
 
-                $lastFiveInTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'in')->orderBy('created_at', 'desc')->limit(5)->get();
-                $lastFiveOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'out')->orderBy('created_at', 'desc')->limit(5)->get();
+            $lastFiveInTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'in')->orderBy('created_at', 'desc')->limit(5)->get();
+            $lastFiveOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)->where('type', 'out')->orderBy('created_at', 'desc')->limit(5)->get();
 
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Get student dashboard data successfully',
-                    'data' => [
-                        'user' => $userData,
-                        'student' => $studentData,
-                        'kelas' => $kelasData,
-                        'savings' => [
-                            'amount' => number_format($savingsData->amount, 0, ',', '.'),
-                            'total_in_transactions' => $totalSavingsInTransactions,
-                            'total_out_transactions' => $totalSavingsOutTransactions
-                        ],
-                        'last_transactions' => [
-                            'in' => $lastFiveInTransactions,
-                            'out' => $lastFiveOutTransactions
-                        ]
+            return response()->json([
+                'status' => true,
+                'message' => 'Get student dashboard data successfully',
+                'data' => [
+                    'user' => $userData,
+                    'student' => $studentData,
+                    'kelas' => $kelasData,
+                    'savings' => [
+                        'amount' => number_format($savingsData->amount, 0, ',', '.'),
+                        'total_in_transactions' => $totalSavingsInTransactions,
+                        'total_out_transactions' => $totalSavingsOutTransactions
+                    ],
+                    'last_transactions' => [
+                        'in' => $lastFiveInTransactions,
+                        'out' => $lastFiveOutTransactions
                     ]
-                ], 200);
-            }
+                ]
+            ], 200);
             return response()->json([
                 'status' => false,
                 'message' => 'Forbidden'
@@ -79,63 +78,80 @@ class DashboardController extends Controller
         }
     }
 
-    public function getSavingsStatistics(Request $request): JsonResponse
+    public function getSavingsStatistics(Request $request)
     {
         try {
-            $userId = $request->user()->id;
+            $user = $request->user();
+            $savingsData = Savings::select(['id', 'amount'])
+                ->where('user_id', $user->id)
+                ->firstOrFail();
 
-            // Highest transactions
-            $highestIn = SavingsHistory::where('user_id', $userId)->where('type', 'in')->orderBy('amount', 'desc')->first();
-            $highestOut = SavingsHistory::where('user_id', $userId)->where('type', 'out')->orderBy('amount', 'desc')->first();
+            $now = Carbon::now();
+            $sixMonthsAgo = $now->copy()->subMonths(6);
+            $twelveWeeksAgo = $now->copy()->subWeeks(12);
 
-            // Lowest transactions
-            $lowestIn = SavingsHistory::where('user_id', $userId)->where('type', 'in')->orderBy('amount', 'asc')->first();
-            $lowestOut = SavingsHistory::where('user_id', $userId)->where('type', 'out')->orderBy('amount', 'asc')->first();
-
-            // Averages
-            $avgIn = SavingsHistory::where('user_id', $userId)->where('type', 'in')->avg('amount') ?? 0;
-            $avgOut = SavingsHistory::where('user_id', $userId)->where('type', 'out')->avg('amount') ?? 0;
-
-            // Monthly average in (group by month)
-            $avgInMonthly = SavingsHistory::where('user_id', $userId)
+            $totalSavingsInTransactions = SavingsHistory::where('savings_id', $savingsData->id)
                 ->where('type', 'in')
-                ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, AVG(amount) as avg_amount')
-                ->groupBy('year', 'month')
-                ->orderBy('year', 'asc')
-                ->orderBy('month', 'asc')
-                ->get();
-
-            $avgOutMonthly = SavingsHistory::where('user_id', $userId)
+                ->count();
+            $totalSavingsOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)
                 ->where('type', 'out')
-                ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, AVG(amount) as avg_amount')
-                ->groupBy('year', 'month')
-                ->orderBy('year', 'asc')
-                ->orderBy('month', 'asc')
-                ->get();
+                ->count();
+
+            $totalValueSavingsInTransactions = SavingsHistory::where('savings_id', $savingsData->id)
+                ->where('type', 'in')
+                ->sum('amount');
+            $totalValueSavingsOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)
+                ->where('type', 'out')
+                ->sum('amount');
+
+            $weeklyData = SavingsHistory::where('savings_id', $savingsData->id)
+                ->whereBetween('created_at', [$twelveWeeksAgo, $now])
+                ->selectRaw('YEARWEEK(created_at, 1) as week, COUNT(*) as count, SUM(amount) as total')
+                ->groupBy('week')
+                ->orderBy('week', 'desc')
+                ->limit(12)
+                ->get()
+                ->reverse()
+                ->values();
+
+            $weeklyGrowth = [
+                'count' => $weeklyData->pluck('count')->toArray(),
+                'amount' => $weeklyData->pluck('total')->toArray(),
+            ];
+
+            $monthlyData = SavingsHistory::where('savings_id', $savingsData->id)
+                ->whereBetween('created_at', [$sixMonthsAgo, $now])
+                ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, SUM(amount) as total')
+                ->groupBy('month')
+                ->orderBy('month', 'desc')
+                ->limit(6)
+                ->get()
+                ->reverse()
+                ->values();
+
+            $monthlyGrowth = [
+                'count' => $monthlyData->pluck('count')->toArray(),
+                'amount' => $monthlyData->pluck('total')->toArray(),
+            ];
 
             return response()->json([
                 'status' => true,
-                'message' => 'Savings statistics retrieved successfully',
                 'data' => [
-                    'highest' => [
-                        'in' => $highestIn,
-                        'out' => $highestOut
+                    'total_transactions' => [
+                        'in' => $totalSavingsInTransactions,
+                        'out' => $totalSavingsOutTransactions,
                     ],
-                    'lowest' => [
-                        'in' => $lowestIn,
-                        'out' => $lowestOut
+                    'total_value' => [
+                        'in' => $totalValueSavingsInTransactions,
+                        'out' => $totalValueSavingsOutTransactions,
                     ],
-                    'average' => [
-                        'in' => $avgIn,
-                        'out' => $avgOut
+                    'growth' => [
+                        'weekly' => $weeklyGrowth,
+                        'monthly' => $monthlyGrowth,
                     ],
-                    'monthly_average' => [
-                        'in' => $avgInMonthly,
-                        'out' => $avgOutMonthly
-                    ]
+                    'current_balance' => $savingsData->amount,
                 ]
-            ], 200);
-
+            ]);
         } catch (Throwable $e) {
             return response()->json([
                 'status' => false,

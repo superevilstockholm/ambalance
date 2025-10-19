@@ -48,12 +48,16 @@ class SavingsHistoryFactory extends Factory
 
         $studentSavings = Savings::where('user_id', $studentUser->id)->first();
 
+        $randomCreatedAt = now()->subMonths(rand(0, 5))->subDays(rand(0, 30))->setTime(rand(0, 23), rand(0, 59), rand(0, 59));
+
         return [
             'savings_id' => $studentSavings->id,
             'user_id' => $teacher->user->id, // id user teacher yang membuat transaksi
             'amount' => $this->faker->numberBetween(2, 200) * 500,
             'type' => $this->faker->randomElement(['in', 'in', 'in', 'out']),
             'description' => $this->faker->sentence(3),
+            'created_at' => $randomCreatedAt,
+            'updated_at' => $randomCreatedAt
         ];
     }
 }
