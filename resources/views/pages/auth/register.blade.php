@@ -77,7 +77,7 @@
                             </div>
                             <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">Sign In</button>
                             <p class="text-muted fs-09 mb-1">Sudah punya akun? <a class="text-primary text-decoration-none fw-bold" href="{{ route('login') }}">Masuk disini</a></p>
-                            <p class="text-muted fs-09 mb-0">Kamu seorang guru? <span style="user-select: none !important;" class="p-0 text-primary text-decoration-none fw-bold fs-09" type="button" id="teacherButton">Daftar disini</span></p>
+                            <p class="text-muted fs-09 mb-0">Kamu seorang siswa? <span style="user-select: none !important;" class="p-0 text-primary text-decoration-none fw-bold fs-09" type="button" id="teacherButton">Daftar disini</span></p>
                         </form>
                     </div>
                 </div>
