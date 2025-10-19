@@ -185,6 +185,7 @@
                                 <td class="${amountClass}">${item.description}</td>
                                 <td class="${amountClass}">${item.type === 'in' ? 'Masuk' : 'Keluar'}</td>
                                 <td class="${amountClass}"><strong>${amountSign} Rp${formattedAmount}</strong></td>
+                                <td class="${amountClass}">${item.teacher ? item.teacher.name : '<em class="text-muted">Tidak diketahui</em>'}</td>
                                 <td class="${amountClass}">${new Date(item.created_at).toLocaleString('id-ID')}</td>
                             </tr>
                         `;
@@ -204,6 +205,7 @@
                                         <th>Deskripsi</th>
                                         <th>Type</th>
                                         <th>Jumlah</th>
+                                        <th>Guru</th>
                                         <th>Tanggal</th>
                                     </tr>
                                 </thead>

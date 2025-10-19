@@ -10,6 +10,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 // Models
 use App\Models\Savings\Savings;
+use App\Models\MasterData\Teacher;
+use App\Models\MasterData\Student;
 
 class User extends Authenticatable
 {
@@ -78,4 +80,13 @@ class User extends Authenticatable
         });
     }
 
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
 }

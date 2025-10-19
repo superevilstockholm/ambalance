@@ -27,28 +27,28 @@
             <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4">
                 <i class="ti ti-user-check fs-2 text-primary mb-2"></i>
                 <h5 class="fw-bold mb-0" id="savingsAmount">Rp. 0</h5>
-                <small class="text-muted">Nominal Tabungan</small>
+                <small class="text-muted fs-09">Nominal Tabungan</small>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-3 mb-0">
             <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4">
                 <i class="ti ti-arrow-up fs-2 text-success mb-2"></i>
                 <h5 class="fw-bold mb-0" id="transactionsInCount">0</h5>
-                <small class="text-muted">Transaksi Masuk</small>
+                <small class="text-muted fs-09">Transaksi Masuk</small>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-3 mb-0">
             <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4">
                 <i class="ti ti-arrow-down fs-2 text-danger mb-2"></i>
                 <h5 class="fw-bold mb-0" id="transactionsOutCount">0</h5>
-                <small class="text-muted">Transaksi Keluar</small>
+                <small class="text-muted fs-09">Transaksi Keluar</small>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-3 mb-0">
             <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4">
                 <i class="ti ti-file-text fs-2 text-warning mb-2"></i>
                 <h5 class="fw-bold mb-0" id="transactionsCount">0</h5>
-                <small class="text-muted">Total Transaksi</small>
+                <small class="text-muted fs-09">Total Transaksi</small>
             </div>
         </div>
     </div>
@@ -79,7 +79,7 @@
                     <div class="d-flex flex-column gap-2">
                         <h5 class="fw-bold mb-0">Petunjuk</h5>
                         <small class="text-muted">
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled fs-09">
                                 <li>1. Untuk melakukan pembayaran tabungan, silakan temui guru yang bertugas.</li>
                                 <li>2. Guru akan memasukkan jumlah pembayaran ke sistem, yang otomatis tercatat di akun Anda.</li>
                                 <li>3. Setelah pembayaran terinput, Anda dapat memeriksa saldo dan transaksi terbaru di dashboard ini.</li>
