@@ -40,8 +40,16 @@ class DatabaseSeeder extends Seeder
         // Students With User
         Student::factory(10)->create();
         // Students Without User
+        Student::firstOrCreate(
+            [
+                'nisn' => '0012345678',
+            ],[
+            'name' => 'Hillary Aimee Srijaya',
+            'dob' => '2008-06-23',
+            'class_id' => Classes::inRandomOrder()->first()->id,
+        ]);
         Student::factory(10)->withoutUser()->create();
-//
+
         // Savings History
         SavingsHistory::factory(200)->create();
     }

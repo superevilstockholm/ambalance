@@ -132,7 +132,7 @@
                         lastIn.appendChild(li);
                     });
                 } else {
-                    lastIn.innerHTML = `<li class="list-group-item text-muted">Belum ada transaksi</li>`;
+                    lastIn.innerHTML = `<li class="list-group-item text-muted bg-transparent">Belum ada transaksi</li>`;
                 }
                 if (data.last_transactions.out.length > 0) {
                     data.last_transactions.out.forEach(tx => {
@@ -142,7 +142,7 @@
                         lastOut.appendChild(li);
                     });
                 } else {
-                    lastOut.innerHTML = `<li class="list-group-item text-muted">Belum ada transaksi</li>`;
+                    lastOut.innerHTML = `<li class="list-group-item text-muted bg-transparent">Belum ada transaksi</li>`;
                 }
             } catch (e) {
                 Swal.fire({
