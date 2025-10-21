@@ -334,4 +334,32 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    public function getUserProfile(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            if ($user->role === 'student') {
+                $user->load('student.class');
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Get user profile successfully',
+                    'data' => $user
+                ], 200);
+            } else if ($user->role === 'teacher') {
+
+            } else if ($user->role === 'admin') {
+
+            }
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found'
+            ], 404);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
