@@ -7,10 +7,10 @@
 @section('content')
     <div class="row mb-3">
         <div class="col-12 mb-2 mb-md-3">
-            <h4 class="fw-bold d-flex align-items-center gap-2">
+            <h3 class="fw-bold d-flex align-items-center gap-2 fs-3">
                 <i class="ti ti-history"></i>
                 Daftar Riwayat Tabungan
-            </h4>
+            </h3>
         </div>
         <div class="col-12 mb-2 mb-md-3">
             <form method="GET" id="form-search" class="d-flex flex-column flex-md-row align-items-stretch gap-2 gap-md-3">
@@ -176,7 +176,7 @@
                     }
                     let rows = data.map((item, index) => {
                         const absoluteIndex = ((current_page - 1) * limit) + index + 1;
-                        const amountClass = item.type === 'in' ? 'text-success' : 'text-danger';
+                        const amountClass = item.type === 'in' ? 'text-success text-opacity-75' : 'text-danger text-opacity-75';
                         const amountSign = item.type === 'in' ? '+' : '-';
                         const formattedAmount = parseInt(item.amount).toLocaleString('id-ID');
                         return `

@@ -9,7 +9,7 @@
             <div class="card shadow-sm mb-0 border-0 px-4">
                 <div class="card-body d-flex align-items-center justify-content-between flex-wrap">
                     <div>
-                        <h4 class="fw-semibold mb-1">Selamat datang, <span class="text-primary" id="userDashboardName"></span>! 👋</h4>
+                        <h3 class="fw-semibold mb-1 fs-3">Selamat datang, <span class="text-primary" id="userDashboardName"></span>! 👋</h3>
                         <p class="text-muted mb-0">
                             Berikut adalah informasi tabungan kamu
                         </p>
@@ -24,28 +24,36 @@
     {{-- Informasi Tabungan Section --}}
     <div class="row g-3 mb-3 mb-md-4">
         <div class="col-12 col-sm-6 col-md-3 mb-0">
-            <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4">
+            <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4 position-relative overflow-hidden">
+                <div class="position-absolute bg-primary rounded-circle top-0 end-0 p-0 m-0 opacity-25" style="width: 170px; height: 170px; transform: translate(60%, -50%);"></div>
+                <div class="position-absolute bg-primary rounded-circle top-100 end-0 p-0 m-0 opacity-50" style="width: 120px; height: 120px; transform: translate(60%, -50%);"></div>
                 <i class="ti ti-user-check fs-2 text-primary mb-2"></i>
                 <h5 class="fw-bold mb-0" id="savingsAmount">Rp. 0</h5>
                 <small class="text-muted fs-09">Nominal Tabungan</small>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-3 mb-0">
-            <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4">
+            <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4 position-relative overflow-hidden">
+                <div class="position-absolute bg-success rounded-circle top-0 end-0 p-0 m-0 opacity-25" style="width: 170px; height: 170px; transform: translate(60%, -50%);"></div>
+                <div class="position-absolute bg-success rounded-circle top-100 end-0 p-0 m-0 opacity-50" style="width: 120px; height: 120px; transform: translate(60%, -50%);"></div>
                 <i class="ti ti-arrow-up fs-2 text-success mb-2"></i>
                 <h5 class="fw-bold mb-0" id="transactionsInCount">0</h5>
                 <small class="text-muted fs-09">Transaksi Masuk</small>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-3 mb-0">
-            <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4">
+            <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4 position-relative overflow-hidden">
+                <div class="position-absolute bg-danger rounded-circle top-0 end-0 p-0 m-0 opacity-25" style="width: 170px; height: 170px; transform: translate(60%, -50%);"></div>
+                <div class="position-absolute bg-danger rounded-circle top-100 end-0 p-0 m-0 opacity-50" style="width: 120px; height: 120px; transform: translate(60%, -50%);"></div>
                 <i class="ti ti-arrow-down fs-2 text-danger mb-2"></i>
                 <h5 class="fw-bold mb-0" id="transactionsOutCount">0</h5>
                 <small class="text-muted fs-09">Transaksi Keluar</small>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-3 mb-0">
-            <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4">
+            <div class="card border-0 mb-0 shadow-sm rounded-3 text-center py-4 position-relative overflow-hidden">
+                <div class="position-absolute bg-warning rounded-circle top-0 end-0 p-0 m-0 opacity-25" style="width: 170px; height: 170px; transform: translate(60%, -50%);"></div>
+                <div class="position-absolute bg-warning rounded-circle top-100 end-0 p-0 m-0 opacity-50" style="width: 120px; height: 120px; transform: translate(60%, -50%);"></div>
                 <i class="ti ti-file-text fs-2 text-warning mb-2"></i>
                 <h5 class="fw-bold mb-0" id="transactionsCount">0</h5>
                 <small class="text-muted fs-09">Total Transaksi</small>
@@ -55,25 +63,31 @@
     {{-- Last Transactions --}}
     <div class="row g-3 mb-3 mb-md-4">
         <div class="col-12 col-md-6 mb-0">
-            <div class="card border-0 shadow-sm mb-0 rounded-3 p-3 h-100">
+            <div class="card border-0 shadow-sm mb-0 rounded-3 p-3 h-100 position-relative overflow-hidden">
+                <div class="position-absolute bg-primary rounded-circle top-0 end-0 p-0 m-0 opacity-25" style="width: 200px; height: 200px; transform: translate(50%, -50%);"></div>
+                <div class="position-absolute bg-primary rounded-circle top-100 start-0 p-0 m-0 opacity-25" style="width: 120px; height: 120px; transform: translate(-50%, -50%);"></div>
                 <h5 class="fw-semibold mb-3">Transaksi Masuk Terakhir</h5>
                 <ul class="list-group list-group-flush text-muted" id="lastInTransactions">
-                    <li class="list-group-item">Belum ada transaksi</li>
+                    <li class="list-group-item bg-transparent">Belum ada transaksi</li>
                 </ul>
             </div>
         </div>
         <div class="col-12 col-md-6 mb-0">
-            <div class="card border-0 shadow-sm mb-0 rounded-3 p-3 h-100">
+            <div class="card border-0 shadow-sm mb-0 rounded-3 p-3 h-100 position-relative overflow-hidden">
+                <div class="position-absolute bg-warning rounded-circle top-0 end-0 p-0 m-0 opacity-25" style="width: 200px; height: 200px; transform: translate(50%, -50%);"></div>
+                <div class="position-absolute bg-warning rounded-circle top-100 start-0 p-0 m-0 opacity-50" style="width: 120px; height: 120px; transform: translate(-50%, -50%);"></div>
                 <h5 class="fw-semibold mb-3">Transaksi Keluar Terakhir</h5>
                 <ul class="list-group list-group-flush text-muted" id="lastOutTransactions">
-                    <li class="list-group-item">Belum ada transaksi</li>
+                    <li class="list-group-item bg-transparent">Belum ada transaksi</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col mb-0">
-            <div class="card border-0 mb-0 shadow-sm rounded-3">
+            <div class="card border-0 mb-0 shadow-sm rounded-3 position-relative overflow-hidden">
+                <div class="position-absolute bg-warning rounded-circle top-0 end-0 p-0 m-0 opacity-25" style="width: 300px; height: 300px; transform: translate(60%, -50%);"></div>
+                <div class="position-absolute bg-warning rounded-circle top-100 end-0 p-0 m-0 opacity-50" style="width: 200px; height: 200px; transform: translate(60%, -50%);"></div>
                 <div class="card-body d-flex flex-column gap-3">
                     <i class="ti ti-clipboard-text fs-1 text-primary"></i>
                     <div class="d-flex flex-column gap-2">
@@ -113,22 +127,22 @@
                 if (data.last_transactions.in.length > 0) {
                     data.last_transactions.in.forEach(tx => {
                         const li = document.createElement('li');
-                        li.className = 'list-group-item d-flex flex-column flex-md-row justify-content-md-between align-items-md-center';
+                        li.className = 'list-group-item d-flex flex-column flex-md-row justify-content-md-between align-items-md-center bg-transparent';
                         li.innerHTML = `<span>${tx.description}</span><span class="text-success">Rp. ${parseFloat(tx.amount).toLocaleString('id-ID')}</span>`;
                         lastIn.appendChild(li);
                     });
                 } else {
-                    lastIn.innerHTML = `<li class="list-group-item text-muted">Belum ada transaksi</li>`;
+                    lastIn.innerHTML = `<li class="list-group-item text-muted bg-transparent">Belum ada transaksi</li>`;
                 }
                 if (data.last_transactions.out.length > 0) {
                     data.last_transactions.out.forEach(tx => {
                         const li = document.createElement('li');
-                        li.className = 'list-group-item d-flex flex-column flex-md-row justify-content-md-between align-items-md-center';
+                        li.className = 'list-group-item d-flex flex-column flex-md-row justify-content-md-between align-items-md-center bg-transparent';
                         li.innerHTML = `<span>${tx.description}</span><span class="text-danger">Rp. ${parseFloat(tx.amount).toLocaleString('id-ID')}</span>`;
                         lastOut.appendChild(li);
                     });
                 } else {
-                    lastOut.innerHTML = `<li class="list-group-item text-muted">Belum ada transaksi</li>`;
+                    lastOut.innerHTML = `<li class="list-group-item text-muted bg-transparent">Belum ada transaksi</li>`;
                 }
             } catch (e) {
                 Swal.fire({

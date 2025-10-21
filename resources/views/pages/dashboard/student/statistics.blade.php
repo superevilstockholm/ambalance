@@ -5,7 +5,7 @@
 @section('content')
     <div class="row mb-3 mb-md-4">
         <div class="col">
-            <h3 class="fw-bold mb-0">Statistik Tabungan</h3>
+            <h3 class="fw-bold mb-0 fs-3">Statistik Tabungan</h3>
             <p class="text-muted mb-0">Data ringkasan aktivitas tabungan kamu di Ambalance.</p>
         </div>
     </div>

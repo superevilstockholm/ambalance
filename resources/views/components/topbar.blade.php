@@ -93,7 +93,11 @@
                             <hr />
                             <div class="profile-notification-scroll position-relative"
                                 style="max-height: calc(100vh - 280px)">
-                                <a href="../application/account-profile-v1.html" class="dropdown-item">
+                                <a href="#" id="account-profile-button" class="dropdown-item">
+                                    <i class="ti ti-user"></i>
+                                    <span>Account Profile</span>
+                                </a>
+                                <a href="#" id="account-settings-button" class="dropdown-item">
                                     <i class="ti ti-settings"></i>
                                     <span>Account Settings</span>
                                 </a>
@@ -109,6 +113,65 @@
         </div>
     </div>
 </header>
+<!-- Modal Account Settings -->
+<div class="modal fade" id="accountProfileModal" tabindex="-1" aria-labelledby="accountProfileLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="accountProfileLabel">Account Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="showOnlyMode">
+                <div class="w-100 p-0 m-0 position-relative border-bottom" style="height: 50px; margin-bottom: calc(50px + 25px) !important;">
+                    <h2 class="position-absolute top-50 start-0 p-0 m-0 fw-semibold text-muted d-none d-md-block overflow-hidden accountName" style="padding-left: calc(125px + 25px) !important; transform: translateY(-25%); text-overflow: ellipsis; max-width: calc(100% - 150px); white-space: nowrap;"></h2>
+                    <img class="position-absolute top-100 start-0 p-0 m-0 object-fit-cover rounded-circle border-1 bg-body shadow-sm" style="height: 100px; width: 100px; transform: translate(25%, -50%);" id="accountProfilePreview" src="{{ asset('static/images/default_profile.svg') }}" alt="User profile image">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 border-md-end">
+                        <div class="mb-2 d-block d-md-none" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">Nama</label>
+                            <p class="accountName text-muted"></p>
+                        </div>
+                        <div class="mb-2" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">Email</label>
+                            <p id="accountEmail" class="text-muted"></p>
+                        </div>
+                        <div class="mb-2" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">NISN</label>
+                            <p id="accountNISN" class="text-muted"></p>
+                        </div>
+                        <div class="mb-2" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">Kelas</label>
+                            <p id="accountClass" class="text-muted"></p>
+                        </div>
+                        <div class="mb-2" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">Tanggal Lahir</label>
+                            <p id="accountDOB" class="text-muted"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-2" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">Role</label>
+                            <p id="accountRole" class="text-muted"></p>
+                        </div>
+                        <div class="mb-2" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">Email Verified</label>
+                            <p id="accountEmailVerified" class="text-muted"></p>
+                        </div>
+                        <div class="mb-2" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">Dibuat Pada</label>
+                            <p id="accountCreatedAt" class="text-muted"></p>
+                        </div>
+                        <div class="mb-2" style="padding-inline: 25px;">
+                            <label class="form-label fw-bold mb-0">Terakhir Diperbarui</label>
+                            <p id="accountUpdatedAt" class="text-muted"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function getGreeting() {
         const hour = new Date().getHours();
@@ -129,13 +192,21 @@
     const userProfilePicture = document.getElementById('userProfilePicture');
     const userName = document.getElementById('userName');
     const userRole = document.getElementById('userRole');
-    async function getUserProfileData() {
+    async function getUserTopbar() {
         try {
             const response = await axios.get('/api/me', { headers: {'Authorization': `Bearer ${getAuthToken()}`} });
             if (response.status === 200 && response.data.status === true) {
                 userProfilePicture.src = response.data.data.profile_picture_url;
                 userName.innerText = response.data.data.fullname;
                 userRole.innerText = response.data.data.role;
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: response.data.message ?? 'Gagal mengambil data profil pengguna!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             }
         } catch (error) {
             Swal.fire({
@@ -148,6 +219,62 @@
         }
     }
     document.addEventListener('DOMContentLoaded', async () => {
+        await getUserTopbar();
+    });
+
+    let accountProfileModal;
+    document.addEventListener('DOMContentLoaded', () => {
+        accountProfileModal = new bootstrap.Modal(document.getElementById('accountProfileModal'));
+    });
+    async function getUserProfileData() {
+        try {
+            const response = await axios.get('/api/profile', {
+                headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+            });
+            if (response.status === 200 && response.data.status === true) {
+                const user = response.data.data;
+                document.getElementById('accountProfilePreview').src = user.profile_picture_url ?? "{{ asset('static/images/default_profile.svg') }}";
+                document.querySelectorAll('.accountName').forEach(el => {
+                    el.textContent = user.student?.name ?? '-';
+                });
+                document.getElementById('accountEmail').textContent = user.email ?? '-';
+                document.getElementById('accountNISN').textContent = user.student?.nisn ?? '-';
+                document.getElementById('accountClass').textContent = user.student?.class?.class_name ?? '-';
+                document.getElementById('accountDOB').textContent = user.student?.dob ? new Date(user.student.dob).toLocaleDateString() : '-';
+                document.getElementById('accountRole').textContent = user.role ?? '-';
+                document.getElementById('accountEmailVerified').textContent = user.email_verified_at
+                    ? new Date(user.email_verified_at).toLocaleString()
+                    : 'Belum diverifikasi';
+                document.getElementById('accountCreatedAt').textContent = user.created_at
+                    ? new Date(user.created_at).toLocaleString()
+                    : '-';
+                document.getElementById('accountUpdatedAt').textContent = user.updated_at
+                    ? new Date(user.updated_at).toLocaleString()
+                    : '-';
+
+            } else {
+                await accountProfileModal.hide();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: response.data.message ?? 'Gagal mengambil data profil pengguna!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        } catch (error) {
+            await accountProfileModal.hide();
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: error.response?.data?.message ?? 'Gagal mengambil data profil pengguna!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    }
+    document.getElementById('account-profile-button').addEventListener('click', async () => {
+        await accountProfileModal.show();
         await getUserProfileData();
     });
 
@@ -173,7 +300,6 @@
             window.location.href = "{{ route('login') }}";
         }
     }
-
     document.getElementById('logout-button').addEventListener('click', async () => {
         await logout();
     });

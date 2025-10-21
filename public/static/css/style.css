@@ -47,6 +47,9 @@
     .pc-footer {
         margin-top: 85px !important;
     }
+    .border-md-end {
+        border-right: 1px solid var(--bs-border-color) !important;
+    }
 }
 
 @media (min-width: 575.99px) {
