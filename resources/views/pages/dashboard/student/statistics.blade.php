@@ -89,7 +89,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 mb-3 mb-md-0">
             <h5 class="fw-semibold mb-3">Pertumbuhan Mingguan</h5>
             <canvas id="weeklyChart" height="150"></canvas>
         </div>
@@ -147,19 +147,21 @@
                             y1: {
                                 type: 'linear',
                                 position: 'left',
+                                beginAtZero: true,
                                 suggestedMin: 0,
                                 title: {
                                     display: true,
                                     text: 'Jumlah Transaksi'
                                 },
                                 ticks: {
-                                    color: '#36a2eb'
+                                    color: '#36a2eb',
                                 },
                                 grace: '10%',
                             },
                             y2: {
                                 type: 'linear',
                                 position: 'right',
+                                beginAtZero: true,
                                 title: {
                                     display: true,
                                     text: 'Jumlah Pembayaran (Rp)'
@@ -204,6 +206,7 @@
                             y1: {
                                 type: 'linear',
                                 position: 'left',
+                                beginAtZero: true,
                                 title: {
                                     display: true,
                                     text: 'Jumlah Transaksi'
@@ -216,6 +219,7 @@
                             y2: {
                                 type: 'linear',
                                 position: 'right',
+                                beginAtZero: true,
                                 title: {
                                     display: true,
                                     text: 'Jumlah Pembayaran (Rp)'

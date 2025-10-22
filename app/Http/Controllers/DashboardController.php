@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Throwable;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 // Models
 use App\Models\User;
@@ -87,53 +89,55 @@ class DashboardController extends Controller
                 ->firstOrFail();
 
             $now = Carbon::now();
-            $sixMonthsAgo = $now->copy()->subMonths(6);
-            $twelveWeeksAgo = $now->copy()->subWeeks(12);
+            $sixMonthsAgo = $now->copy()->subMonths(6)->startOfMonth();
+            $twelveWeeksAgo = $now->copy()->subWeeks(12)->startOfWeek();
 
+            // === TOTAL TRANSAKSI ===
             $totalSavingsInTransactions = SavingsHistory::where('savings_id', $savingsData->id)
-                ->where('type', 'in')
-                ->count();
+                ->where('type', 'in')->count();
             $totalSavingsOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)
-                ->where('type', 'out')
-                ->count();
+                ->where('type', 'out')->count();
 
             $totalValueSavingsInTransactions = SavingsHistory::where('savings_id', $savingsData->id)
-                ->where('type', 'in')
-                ->sum('amount');
+                ->where('type', 'in')->sum('amount');
             $totalValueSavingsOutTransactions = SavingsHistory::where('savings_id', $savingsData->id)
-                ->where('type', 'out')
-                ->sum('amount');
+                ->where('type', 'out')->sum('amount');
 
-            $weeklyData = SavingsHistory::where('savings_id', $savingsData->id)
+            // === WEEKLY DATA ===
+            $weeklyQuery = SavingsHistory::where('savings_id', $savingsData->id)
                 ->whereBetween('created_at', [$twelveWeeksAgo, $now])
-                ->selectRaw('YEARWEEK(created_at, 1) as week, COUNT(*) as count, SUM(amount) as total')
-                ->groupBy('week')
-                ->orderBy('week', 'desc')
-                ->limit(12)
+                ->selectRaw('YEARWEEK(created_at, 1) as week_key, COUNT(*) as count, SUM(amount) as total')
+                ->groupBy('week_key')
                 ->get()
-                ->reverse()
-                ->values();
+                ->keyBy('week_key');
 
-            $weeklyGrowth = [
-                'count' => $weeklyData->pluck('count')->toArray(),
-                'amount' => $weeklyData->pluck('total')->toArray(),
-            ];
+            $weeklyPeriod = CarbonPeriod::create($twelveWeeksAgo, '1 week', $now);
+            $weeklyGrowth = ['count' => [], 'amount' => []];
 
-            $monthlyData = SavingsHistory::where('savings_id', $savingsData->id)
+            foreach ($weeklyPeriod as $date) {
+                $weekKey = $date->format('oW'); // format 202540 misalnya
+                $weeklyGrowth['count'][] = (int) ($weeklyQuery[$weekKey]->count ?? 0);
+                $weeklyGrowth['amount'][] = number_format($weeklyQuery[$weekKey]->total ?? 0, 2, '.', '');
+            }
+
+            // === MONTHLY DATA ===
+            $monthlyQuery = SavingsHistory::where('savings_id', $savingsData->id)
                 ->whereBetween('created_at', [$sixMonthsAgo, $now])
-                ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, SUM(amount) as total')
-                ->groupBy('month')
-                ->orderBy('month', 'desc')
-                ->limit(6)
+                ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month_key, COUNT(*) as count, SUM(amount) as total')
+                ->groupBy('month_key')
                 ->get()
-                ->reverse()
-                ->values();
+                ->keyBy('month_key');
 
-            $monthlyGrowth = [
-                'count' => $monthlyData->pluck('count')->toArray(),
-                'amount' => $monthlyData->pluck('total')->toArray(),
-            ];
+            $monthlyPeriod = CarbonPeriod::create($sixMonthsAgo, '1 month', $now);
+            $monthlyGrowth = ['count' => [], 'amount' => []];
 
+            foreach ($monthlyPeriod as $date) {
+                $monthKey = $date->format('Y-m');
+                $monthlyGrowth['count'][] = (int) ($monthlyQuery[$monthKey]->count ?? 0);
+                $monthlyGrowth['amount'][] = number_format($monthlyQuery[$monthKey]->total ?? 0, 2, '.', '');
+            }
+
+            // === RESPONSE JSON ===
             return response()->json([
                 'status' => true,
                 'data' => [
@@ -155,7 +159,7 @@ class DashboardController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'status' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
