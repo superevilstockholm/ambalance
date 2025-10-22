@@ -40,6 +40,8 @@
     <script src="{{ asset('static/js/axios.min.js') }}" defer></script>
     {{-- Sweet Alert 2 --}}
     <script src="{{ asset('static/js/sweetalert2.min.js') }}" defer></script>
+    {{-- Chart JS --}}
+    <script src="{{ asset('static/js/chart.js') }}" defer></script>
     {{-- Content --}}
     <x-sidebar :meta="$meta"></x-sidebar>
     <x-topbar></x-topbar>
@@ -97,6 +99,5 @@
     {{-- Custom Template JS --}}
     <script src="{{ asset('static/berry_template/js/script.js') }}" defer></script>
     {{-- ====== End Template ====== --}}
-    <script src="{{ asset('static/js/chart.js') }}"></script>
 </body>
 </html>
