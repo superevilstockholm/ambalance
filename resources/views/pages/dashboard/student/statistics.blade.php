@@ -91,150 +91,133 @@
     <div class="row">
         <div class="col-lg-6 mb-3 mb-md-0">
             <h5 class="fw-semibold mb-3">Pertumbuhan Mingguan</h5>
-            <canvas id="weeklyChart" height="150"></canvas>
+            <canvas id="weeklyChart" style="min-height: 300px; max-height: 300px;" height="300"></canvas>
         </div>
         <div class="col-lg-6">
             <h5 class="fw-semibold mb-3">Pertumbuhan Bulanan</h5>
-            <canvas id="monthlyChart" height="150"></canvas>
+            <canvas id="monthlyChart" style="min-height: 300px; max-height: 300px;" height="300"></canvas>
         </div>
     </div>
     <script>
+        let weeklyChartInstance;
+        let monthlyChartInstance;
+        function initCharts() {
+            const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+            weeklyChartInstance = new Chart(weeklyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Minggu 1','Minggu 2','Minggu 3','Minggu 4','Minggu 5','Minggu 6','Minggu 7','Minggu 8','Minggu 9','Minggu 10', 'Minggu 11', 'Minggu 12', 'Minggu 13'],
+                    datasets: [
+                        {
+                            label: 'Jumlah Transaksi',
+                            data: Array(13).fill(0),
+                            borderColor: '#36a2eb',
+                            backgroundColor: 'rgba(54,162,235,0.2)',
+                            yAxisID: 'y1',
+                            tension: 0.3,
+                            fill: false,
+                        },
+                        {
+                            label: 'Jumlah Pembayaran (Rp)',
+                            data: Array(13).fill(0),
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76,175,80,0.2)',
+                            yAxisID: 'y2',
+                            tension: 0.3,
+                            fill: false,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    animation: { duration: 1000, easing: 'easeOutQuart' },
+                    interaction: { mode: 'index', intersect: false },
+                    stacked: false,
+                    scales: {
+                        y1: {
+                            type: 'linear',
+                            position: 'left',
+                            beginAtZero: true,
+                            title: { display: true, text: 'Jumlah Transaksi' },
+                            ticks: { color: '#36a2eb', callback: function(value) { return Number.isInteger(value) ? value : null; }},
+                            grace: '10%',
+                        },
+                        y2: {
+                            type: 'linear',
+                            position: 'right',
+                            beginAtZero: true,
+                            title: { display: true, text: 'Jumlah Pembayaran (Rp)' },
+                            grid: { drawOnChartArea: false },
+                            ticks: { color: '#4caf50' },
+                            grace: '10%',
+                        }
+                    }
+                }
+            });
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            monthlyChartInstance = new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Bulan 1','Bulan 2','Bulan 3','Bulan 4','Bulan 5','Bulan 6','Bulan 7'],
+                    datasets: [
+                        {
+                            label: 'Jumlah Transaksi',
+                            data: Array(7).fill(0),
+                            backgroundColor: 'rgba(54,162,235,0.5)',
+                            yAxisID: 'y1'
+                        },
+                        {
+                            label: 'Jumlah Pembayaran (Rp)',
+                            data: Array(7).fill(0),
+                            backgroundColor: 'rgba(76,175,80,0.5)',
+                            yAxisID: 'y2'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    animation: { duration: 1000, easing: 'easeOutQuart' },
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        y1: {
+                            type: 'linear',
+                            position: 'left',
+                            beginAtZero: true,
+                            title: { display: true, text: 'Jumlah Transaksi' },
+                            ticks: { color: '#36a2eb', callback: function(value) { return Number.isInteger(value) ? value : null; } },
+                            grace: '10%',
+                        },
+                        y2: {
+                            type: 'linear',
+                            position: 'right',
+                            beginAtZero: true,
+                            title: { display: true, text: 'Jumlah Pembayaran (Rp)' },
+                            grid: { drawOnChartArea: false, },
+                            ticks: { color: '#4caf50' },
+                            grace: '10%',
+                        }
+                    }
+                }
+            });
+        }
         async function getSavingsStatistics() {
             try {
                 const response = await axios.get('/api/savings-statistics', {
-                    headers: {
-                        'Authorization': `Bearer ${getAuthToken()}`
-                    }
+                    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
                 });
                 const data = response.data.data;
                 document.getElementById('totalIn').textContent = data.total_transactions.in;
                 document.getElementById('totalOut').textContent = data.total_transactions.out;
                 document.getElementById('valueIn').textContent = formatRupiah(data.total_value.in);
                 document.getElementById('valueOut').textContent = formatRupiah(data.total_value.out);
-                const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
-                new Chart(weeklyCtx, {
-                    type: 'line',
-                    data: {
-                        labels: data.growth.weekly.count.map((_, i) => `Minggu ${i + 1}`),
-                        datasets: [{
-                                label: 'Jumlah Transaksi',
-                                data: data.growth.weekly.count,
-                                borderColor: '#36a2eb',
-                                backgroundColor: 'rgba(54,162,235,0.2)',
-                                yAxisID: 'y1',
-                                tension: 0.3,
-                                fill: false,
-                            },
-                            {
-                                label: 'Jumlah Pembayaran (Rp)',
-                                data: data.growth.weekly.amount,
-                                borderColor: '#4caf50',
-                                backgroundColor: 'rgba(76,175,80,0.2)',
-                                yAxisID: 'y2',
-                                tension: 0.3,
-                                fill: false,
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        interaction: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        stacked: false,
-                        scales: {
-                            y1: {
-                                type: 'linear',
-                                position: 'left',
-                                beginAtZero: true,
-                                suggestedMin: 0,
-                                title: {
-                                    display: true,
-                                    text: 'Jumlah Transaksi'
-                                },
-                                ticks: {
-                                    color: '#36a2eb',
-                                },
-                                grace: '10%',
-                            },
-                            y2: {
-                                type: 'linear',
-                                position: 'right',
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Jumlah Pembayaran (Rp)'
-                                },
-                                grid: {
-                                    drawOnChartArea: false
-                                },
-                                ticks: {
-                                    color: '#4caf50'
-                                },
-                                grace: '10%',
-                            }
-                        }
-                    }
-                });
-                const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-                new Chart(monthlyCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.growth.monthly.count.map((_, i) => `Bulan ${i + 1}`),
-                        datasets: [{
-                                label: 'Jumlah Transaksi',
-                                data: data.growth.monthly.count,
-                                backgroundColor: 'rgba(54,162,235,0.5)',
-                                yAxisID: 'y1'
-                            },
-                            {
-                                label: 'Jumlah Pembayaran (Rp)',
-                                data: data.growth.monthly.amount,
-                                backgroundColor: 'rgba(76,175,80,0.5)',
-                                yAxisID: 'y2'
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        interaction: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        scales: {
-                            y1: {
-                                type: 'linear',
-                                position: 'left',
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Jumlah Transaksi'
-                                },
-                                ticks: {
-                                    color: '#36a2eb'
-                                },
-                                grace: '10%',
-                            },
-                            y2: {
-                                type: 'linear',
-                                position: 'right',
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Jumlah Pembayaran (Rp)'
-                                },
-                                grid: {
-                                    drawOnChartArea: false
-                                },
-                                ticks: {
-                                    color: '#4caf50'
-                                },
-                                grace: '10%',
-                            }
-                        }
-                    }
-                });
+                weeklyChartInstance.data.labels = data.growth.weekly.count.map((_, i) => `Minggu ${i + 1}`);
+                weeklyChartInstance.data.datasets[0].data = data.growth.weekly.count;
+                weeklyChartInstance.data.datasets[1].data = data.growth.weekly.amount;
+                weeklyChartInstance.update();
+                monthlyChartInstance.data.labels = data.growth.monthly.count.map((_, i) => `Bulan ${i + 1}`);
+                monthlyChartInstance.data.datasets[0].data = data.growth.monthly.count;
+                monthlyChartInstance.data.datasets[1].data = data.growth.monthly.amount;
+                monthlyChartInstance.update();
             } catch (e) {
                 Swal.fire({
                     icon: 'error',
@@ -245,14 +228,12 @@
                 });
             }
         }
-        function formatRupiah(value) {
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR'
-            }).format(value);
-        }
         document.addEventListener('DOMContentLoaded', async () => {
+            initCharts();
             await getSavingsStatistics();
         });
+        function formatRupiah(value) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
+        }
     </script>
 @endsection
