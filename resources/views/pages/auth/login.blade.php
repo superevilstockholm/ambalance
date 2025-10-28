@@ -77,10 +77,18 @@
                 }
             });
             if (response.status === 200 && response.data.status === true) {
-                window.location.href = `/${response.headers['x-user-role']}`;
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Login Berhasil',
+                    text: response.data.message,
+                    showConfirmButton: false,
+                    timer: 1000
+                }).then(async () => {
+                    window.location.href = `/${response.headers['x-user-role']}`;
+                });
                 return;
             }
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Login Gagal',
                 text: response.data.message ?? 'Terjadi kesalahan!',
@@ -88,7 +96,7 @@
                 confirmButtonText: 'OK'
             });
         } catch (error) {
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Login Gagal',
                 text: error.response?.data?.message ?? 'Terjadi kesalahan!',

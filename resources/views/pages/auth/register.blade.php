@@ -99,16 +99,18 @@
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
             });
             if (response.status === 201 && response.data.status === true) {
-                Swal.fire({
+                await Swal.fire({
                     icon: 'success',
                     title: 'Registrasi Berhasil',
                     text: response.data.message,
-                    showConfirmButton: true,
-                    confirmButtonText: 'OK'
-                }).then(() => window.location.href = "{{ route('login') }}");
+                    showConfirmButton: false,
+                    timer: 1000
+                }).then(async () => {
+                    window.location.href = "{{ route('login') }}";
+                });
                 return;
             }
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Registrasi Gagal',
                 text: response.data.message ?? 'Terjadi kesalahan!',
@@ -116,7 +118,7 @@
                 confirmButtonText: 'OK'
             });
         } catch (error) {
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Registrasi Gagal',
                 text: error.response?.data?.message ?? 'Terjadi kesalahan!',

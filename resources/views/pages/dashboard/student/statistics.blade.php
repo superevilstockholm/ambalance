@@ -219,7 +219,7 @@
                 monthlyChartInstance.data.datasets[1].data = data.growth.monthly.amount;
                 monthlyChartInstance.update();
             } catch (e) {
-                Swal.fire({
+                await Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
                     text: e.response?.data?.message ?? 'Terjadi kesalahan saat mengambil data!',
