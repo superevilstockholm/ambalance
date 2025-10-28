@@ -200,7 +200,7 @@
                 userName.innerText = response.data.data.fullname;
                 userRole.innerText = response.data.data.role;
             } else {
-                Swal.fire({
+                await Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
                     text: response.data.message ?? 'Gagal mengambil data profil pengguna!',
@@ -209,7 +209,7 @@
                 });
             }
         } catch (error) {
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Gagal',
                 text: error.response?.data?.message ?? 'Gagal mengambil data profil pengguna!',
@@ -254,7 +254,7 @@
 
             } else {
                 await accountProfileModal.hide();
-                Swal.fire({
+                await Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
                     text: response.data.message ?? 'Gagal mengambil data profil pengguna!',
@@ -264,7 +264,7 @@
             }
         } catch (error) {
             await accountProfileModal.hide();
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Gagal',
                 text: error.response?.data?.message ?? 'Gagal mengambil data profil pengguna!',
@@ -280,24 +280,37 @@
 
     async function logout() {
         try {
+            const logoutConfirm = await Swal.fire({
+                icon: 'warning',
+                title: 'Logout',
+                text: 'Apakah Anda yakin ingin logout?',
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            });
+            if (!logoutConfirm.isConfirmed) return;
             const response = await axios.post('/api/logout', {}, { headers: {'Authorization': `Bearer ${getAuthToken()}`} });
-            Swal.fire({
+            await Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
                 text: response.data.message ?? 'Berhasil logout!',
-                showConfirmButton: true,
-                confirmButtonText: 'OK'
-            })
+                showConfirmButton: false,
+                timer: 1000
+            }).then(async () => {
+                window.location.href = "{{ route('login') }}";
+            });
         } catch (e) {
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Gagal',
                 text: e.response?.data?.message ?? 'Terjadi kesalahan!',
                 showConfirmButton: true,
                 confirmButtonText: 'OK'
-            })
-        } finally {
-            window.location.href = "{{ route('login') }}";
+            }).then(async () => {
+                window.location.href = "{{ route('login') }}";
+            });
         }
     }
     document.getElementById('logout-button').addEventListener('click', async () => {

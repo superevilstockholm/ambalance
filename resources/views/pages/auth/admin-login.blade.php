@@ -39,16 +39,18 @@
                 password: password
             }, { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } });
             if (response.status == 200 && response.data.status == true) {
-                Swal.fire({
+                await Swal.fire({
                     icon: 'success',
                     title: 'Login Berhasil',
                     text: response.data.message,
                     showConfirmButton: true,
                     confirmButtonText: 'OK'
-                }).then(() => window.location.href = "{{ route('admin.dashboard') }}");
+                }).then(async () => {
+                    window.location.href = "{{ route('admin.dashboard') }}"
+                });
                 return;
             }
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Login Gagal',
                 text: response.data.message ?? 'Terjadi kesalahan!',
@@ -56,7 +58,7 @@
                 confirmButtonText: 'OK'
             });
         } catch (error) {
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Login Gagal',
                 text: error.response?.data?.message ?? 'Terjadi kesalahan!',

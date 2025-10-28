@@ -145,7 +145,7 @@
                     lastOut.innerHTML = `<li class="list-group-item text-muted bg-transparent">Belum ada transaksi</li>`;
                 }
             } catch (e) {
-                Swal.fire({
+                await Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
                     text: e.response?.data?.message ?? 'Terjadi kesalahan saat mengambil data!',

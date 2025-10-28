@@ -230,7 +230,7 @@
                         });
                     });
                 } else {
-                    Swal.fire({
+                    await Swal.fire({
                         icon: 'error',
                         title: 'Gagal Memuat',
                         text: response.data.message || 'Terjadi kesalahan saat mengambil data.'
@@ -238,7 +238,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                Swal.fire({
+                await Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Tidak dapat memuat data riwayat tabungan.'
