@@ -27,49 +27,18 @@
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header">
                             <h5>
-                                All Notification
-                                <span class="badge bg-warning rounded-pill ms-1">01</span>
+                                Recent Notification
                             </h5>
                         </div>
                         <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
                             style="max-height: calc(100vh - 215px)">
-                            <div class="list-group list-group-flush w-100">
-                                <div class="list-group-item list-group-item-action">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="user-avtar bg-light-success"><i
-                                                    class="ti ti-building-store"></i></div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-1">
-                                            <span class="float-end text-muted">3 min ago</span>
-                                            <h5>Store Verification Done</h5>
-                                            <p class="text-body fs-6">We have successfully received your request.
-                                            </p>
-                                            <div class="badge rounded-pill bg-light-danger">Unread</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="list-group-item list-group-item-action">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <img src="{{ asset('static/images/default_profile.svg') }}" alt="user-image"
-                                                class="user-avtar" />
-                                        </div>
-                                        <div class="flex-grow-1 ms-1">
-                                            <span class="float-end text-muted">10 min ago</span>
-                                            <h5>Joseph William</h5>
-                                            <p class="text-body fs-6">It is a long established fact that a reader
-                                                will be distracted</p>
-                                            <div class="badge rounded-pill bg-light-success">Confirmation of
-                                                Account</div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div id="notificationList" class="list-group list-group-flush w-100">
+                                {{-- Notifications --}}
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
                         <div class="text-center py-2">
-                            <a href="#!" class="link-primary">Mark as all read</a>
+                            <a href="#" class="link-primary">Show All Notifications</a>
                         </div>
                     </div>
                 </li>
@@ -315,5 +284,68 @@
     }
     document.getElementById('logout-button').addEventListener('click', async () => {
         await logout();
+    });
+
+    async function getNotifications() {
+        try {
+            const response = await axios.get('/api/notifications', {
+                headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+            });
+            if (response.status === 200 && response.data.status === true) {
+                const notifications = response.data.data;
+                const container = document.getElementById('notificationList');
+                container.innerHTML = '';
+                if (notifications.length === 0) {
+                    container.innerHTML = `
+                        <div class="list-group-item text-center text-muted">
+                            Tidak ada notifikasi
+                        </div>`;
+                    return;
+                }
+                notifications.forEach(item => {
+                    const isUnread = item.is_read === 0;
+                    const iconColor = isUnread ? 'bg-light-warning' : 'bg-light-success';
+                    const statusBadge = isUnread
+                        ? '<div class="badge rounded-pill bg-light-danger">Unread</div>'
+                        : '<div class="badge rounded-pill bg-light-secondary">Read</div>';
+                    const notifElement = `
+                        <div class="list-group-item list-group-item-action" data-id="${item.id}">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="user-avtar ${iconColor}">
+                                        <i class="ti ti-bell"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-1">
+                                    <span class="float-end text-muted">${item.created_at}</span>
+                                    <h5>${item.title}</h5>
+                                    <p class="text-body fs-6 mb-1">${item.body}</p>
+                                    ${statusBadge}
+                                </div>
+                            </div>
+                        </div>`;
+                    container.insertAdjacentHTML('beforeend', notifElement);
+                });
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: response.data.message ?? 'Gagal mengambil data notifikasi!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: error.response?.data?.message ?? 'Gagal mengambil data notifikasi!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    }
+    document.addEventListener('DOMContentLoaded', async () => {
+        await getNotifications();
     });
 </script>

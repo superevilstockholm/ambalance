@@ -31,6 +31,7 @@ class NotificationController extends Controller
                     'id' => $item->id,
                     'title' => $item->notification->title,
                     'body' => $item->notification->body,
+                    'savings_history_id' => $item->notification->savings_history_id,
                     'is_read' => $item->is_read,
                     'created_at' => $item->notification->created_at->diffForHumans(),
                 ];
