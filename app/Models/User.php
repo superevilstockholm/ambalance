@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Savings\Savings;
 use App\Models\MasterData\Teacher;
 use App\Models\MasterData\Student;
+use App\Models\Settings\NotificationUser;
 
 class User extends Authenticatable
 {
@@ -88,5 +89,10 @@ class User extends Authenticatable
     public function student()
     {
         return $this->hasOne(Student::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(NotificationUser::class);
     }
 }

@@ -51,6 +51,6 @@ class DatabaseSeeder extends Seeder
         Student::factory(10)->withoutUser()->create();
 
         // Savings History
-        SavingsHistory::factory(200)->create();
+        SavingsHistory::factory(300)->create();
     }
 }
