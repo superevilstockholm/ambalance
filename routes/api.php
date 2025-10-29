@@ -8,6 +8,9 @@ use App\Http\Controllers\AuthController;
 // Dashboard
 use App\Http\Controllers\DashboardController;
 
+// Notification
+use App\Http\Controllers\Settings\NotificationController;
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
@@ -26,6 +29,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware(['role:student'])->group(function () {
         Route::get('/savings-statistics', [DashboardController::class, 'getSavingsStatistics']);
         Route::get('/savings-histories', [DashboardController::class, 'getSavingsHistories']);
+        Route::get('/notifications', [NotificationController::class, 'getNotifications']);
     });
 
     // Protectetd - Role: Teacher
