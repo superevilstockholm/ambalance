@@ -24,7 +24,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/profile', [AuthController::class, 'getUserProfile']);
 
     Route::get('/dashboard-data', [DashboardController::class, 'getStudentDashboardData']);
+
     Route::get('/notifications', [NotificationController::class, 'getNotifications']);
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markNotificationAsRead']);
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllNotificationsAsRead']);
 
     // Protectetd - Role: Student
     Route::middleware(['role:student'])->group(function () {
