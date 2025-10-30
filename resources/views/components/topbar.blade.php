@@ -26,8 +26,12 @@
                     </a>
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header">
-                            <h5>
+                            <h5 class="d-flex align-items-center justify-content-between">
                                 Recent Notification
+                                <span id="readAllNotifications" class="badge bg-primary rounded-pill d-flex align-items-center gap-1" style="cursor: pointer !important;">
+                                    <i class="ti ti-bell-check"></i>
+                                    Read All
+                                </span>
                             </h5>
                         </div>
                         <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
@@ -309,7 +313,7 @@
                         ? '<div class="badge rounded-pill bg-light-danger">Unread</div>'
                         : '<div class="badge rounded-pill bg-light-secondary">Read</div>';
                     const notifElement = `
-                        <div class="list-group-item list-group-item-action" data-id="${item.id}">
+                        <div class="list-group-item list-group-item-action" data-id="${item.id}" style="cursor: ${isUnread ? 'pointer' : 'default'} !important;">
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
                                     <div class="user-avtar ${iconColor}">
@@ -318,7 +322,7 @@
                                 </div>
                                 <div class="flex-grow-1 ms-1">
                                     <span class="float-end text-muted">${item.created_at}</span>
-                                    <h5>${item.title}</h5>
+                                    <h5 style="cursor: ${isUnread ? 'pointer' : 'default'} !important;">${item.title}</h5>
                                     <p class="text-body fs-6 mb-1">${item.body}</p>
                                     ${statusBadge}
                                 </div>
@@ -346,6 +350,93 @@
         }
     }
     document.addEventListener('DOMContentLoaded', async () => {
+        await getNotifications();
+    });
+
+    async function markNotificationAsRead(id, notifItem = null) {
+        try {
+            const response = await axios.patch(`/api/notifications/${id}/read`, {}, {
+                headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+            });
+            if (response.status === 200 && response.data.status === true) {
+                if (notifItem) {
+                    const badge = notifItem.querySelector('.badge');
+                    if (badge) {
+                        badge.classList.remove('bg-light-danger');
+                        badge.classList.add('bg-light-secondary');
+                        badge.textContent = 'Read';
+                    }
+                } else {
+                    await getNotifications();
+                }
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: response.data.message ?? 'Gagal menandai notifikasi sebagai telah dibaca!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: error.response?.data?.message ?? 'Gagal menandai notifikasi sebagai telah dibaca!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    }
+    document.getElementById('notificationList').addEventListener('click', async (e) => {
+        const notifItem = e.target.closest('.list-group-item[data-id]');
+        if (!notifItem) return;
+        const badge = notifItem.querySelector('.badge');
+        if (badge && badge.textContent === 'Read') {
+            return;
+        }
+        const notificationId = notifItem.dataset.id;
+        await markNotificationAsRead(notificationId, notifItem);
+    });
+
+    async function markAllNotificationsAsRead() {
+        try {
+            const readAllButton = document.getElementById('readAllNotifications');
+            readAllButton.classList.add('disabled');
+            const response = await axios.patch('/api/notifications/read-all', {}, {
+                headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+            });
+            if (response.status === 200 && response.data.status === true) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: response.data.message ?? 'Berhasil menandai semua notifikasi sebagai telah dibaca!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: response.data.message ?? 'Gagal menandai semua notifikasi sebagai telah dibaca!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        } catch (error) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: error.response?.data?.message ?? 'Gagal menandai semua notifikasi sebagai telah dibaca!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } finally {
+            readAllButton.classList.remove('disabled');
+        }
+    }
+    document.getElementById('readAllNotifications').addEventListener('click', async () => {
+        await markAllNotificationsAsRead();
         await getNotifications();
     });
 </script>
