@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 // Models
+use App\Models\User;
 use App\Models\MasterData\Teacher;
 use App\Models\MasterData\Student;
 
@@ -60,6 +62,50 @@ class ProfileController extends Controller
                 'status' => false,
                 'message' => 'User not found'
             ], 404);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function editUserProfile(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'type' => 'required|string|in:profile_picture,email',
+            ]);
+            $user = $request->user();
+            if ($validated['type'] === 'profile_picture') {
+                $validated = $request->validate([
+                    'profile_picture' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                ]);
+                $path = $request->file('profile_picture')->store('users/profile_pictures', 'public');
+                User::where('id', $user->id)->update([
+                    'profile_picture' => $path
+                ]);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Update profile picture successfully',
+                ], 200);
+            } else if ($validated['type'] === 'email') {
+                $validated = $request->validate([
+                    'email' => 'required|email|unique:users,email,' . $user->id
+                ]);
+                User::where('id', $user->id)->update([
+                    'email' => $validated['email']
+                ]);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Update email successfully'
+                ], 200);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->validator->errors()->first()
+            ], 400);
         } catch (Throwable $e) {
             return response()->json([
                 'status' => false,
