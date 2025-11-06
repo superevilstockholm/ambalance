@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 // Models
@@ -81,6 +82,9 @@ class ProfileController extends Controller
                 $validated = $request->validate([
                     'profile_picture' => 'required|image|mimes:jpeg,png,jpg|max:2048',
                 ]);
+                if ($user->profile_picture) {
+                    Storage::disk('public')->delete($user->profile_picture);
+                }
                 $path = $request->file('profile_picture')->store('users/profile_pictures', 'public');
                 User::where('id', $user->id)->update([
                     'profile_picture' => $path
