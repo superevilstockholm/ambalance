@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 // Auth
 use App\Http\Controllers\AuthController;
 
+// Profile
+use App\Http\Controllers\ProfileController;
+
 // Dashboard
 use App\Http\Controllers\DashboardController;
 
@@ -20,8 +23,11 @@ Route::post('/admin-login', [AuthController::class, 'adminLogin']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::patch('/change-password', [AuthController::class, 'changePassword']);
-    Route::get('/me', [AuthController::class, 'getUser']);
-    Route::get('/profile', [AuthController::class, 'getUserProfile']);
+
+    // Profile
+    Route::get('/me', [ProfileController::class, 'getUser']);
+    Route::get('/profile', [ProfileController::class, 'getUserProfile']);
+    Route::patch('/profile', [ProfileController::class, 'editUserProfile']);
 
     Route::get('/dashboard-data', [DashboardController::class, 'getStudentDashboardData']);
 
