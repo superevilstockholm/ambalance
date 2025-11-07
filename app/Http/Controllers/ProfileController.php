@@ -98,7 +98,8 @@ class ProfileController extends Controller
                     'email' => 'required|email|unique:users,email,' . $user->id
                 ]);
                 User::where('id', $user->id)->update([
-                    'email' => $validated['email']
+                    'email' => $validated['email'],
+                    'email_verified_at' => null
                 ]);
                 return response()->json([
                     'status' => true,

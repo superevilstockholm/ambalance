@@ -626,9 +626,7 @@
                 formData.append('email', newEmail);
                 const success = await sendPatchRequest(formData, 'Memperbarui Email...');
                 if (success) {
-                    if (accountEmailSpan) {
-                        accountEmailSpan.innerText = newEmail;
-                    }
+                    await getUserProfileData();
                 }
             }
         }
