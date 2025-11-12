@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\MasterData\Teacher;
 use App\Models\MasterData\Classes;
 use App\Models\MasterData\Student;
+use App\Models\Savings\Savings;
 use App\Models\Savings\SavingsHistory;
 
 class DatabaseSeeder extends Seeder
@@ -39,16 +40,16 @@ class DatabaseSeeder extends Seeder
 
         // Students With User
         Student::factory(10)->create();
+
         // Students Without User
-        Student::firstOrCreate(
-            [
-                'nisn' => '0012345678',
-            ],[
+        Student::factory(10)->withoutUser()->create();
+        Student::firstOrCreate([
+            'nisn' => '0012345678',
+        ], [
             'name' => 'Hillary Aimee Srijaya',
             'dob' => '2008-06-23',
-            'class_id' => Classes::inRandomOrder()->first()->id,
+            'class_id' => Classes::where('teacher_id', '!=', null)->inRandomOrder()->first()->id,
         ]);
-        Student::factory(10)->withoutUser()->create();
 
         // Savings History
         SavingsHistory::factory(300)->create();
