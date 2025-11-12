@@ -53,7 +53,7 @@
                     <a class="pc-head-link head-link-primary dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
                         href="#" role="button" aria-haspopup="false" aria-expanded="false">
                         <img id="userProfilePicture" src="{{ asset('static/images/default_profile.svg') }}"
-                            alt="user-image" class="user-avtar" />
+                            alt="user-image" class="user-avtar object-fit-cover" style="width: 34px; height: 34px;" />
                         <span>
                             <i class="ti ti-settings"></i>
                         </span>
@@ -566,7 +566,7 @@
                     title: 'Pratinjau Gambar Profil',
                     html: `
                         <div class="d-flex flex-column align-items-center">
-                            <img src="${previewURL}" alt="Preview" style="max-width:200px; border-radius:50%; box-shadow:0 0 10px rgba(0,0,0,0.3); margin-bottom:15px;">
+                            <img src="${previewURL}" alt="Preview" class="object-fit-cover" style="width:200px; height: 200px; object-position: center; border-radius:50%; box-shadow:0 0 10px rgba(0,0,0,0.3); margin-bottom:15px;">
                             <p class="text-muted">Apakah Anda ingin mengunggah gambar ini sebagai foto profil?</p>
                         </div>
                     `,
