@@ -106,11 +106,11 @@
             weeklyChartInstance = new Chart(weeklyCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Minggu 1','Minggu 2','Minggu 3','Minggu 4','Minggu 5','Minggu 6','Minggu 7','Minggu 8','Minggu 9','Minggu 10', 'Minggu 11', 'Minggu 12', 'Minggu 13'],
+                    labels: ['This Week','Last Week','3 Weeks Ago','4 Weeks Ago','5 Weeks Ago','6 Weeks Ago','7 Weeks Ago','8 Weeks Ago','9 Weeks Ago','10 Weeks Ago', '11 Weeks Ago', '12 Weeks Ago', '13 Weeks Ago', '14 Weeks Ago', '15 Weeks Ago', '16 Weeks Ago', '17 Weeks Ago', '18 Weeks Ago', '19 Weeks Ago', '20 Weeks Ago', '21 Weeks Ago', '22 Weeks Ago', '23 Weeks Ago', '24 Weeks Ago'],
                     datasets: [
                         {
                             label: 'Jumlah Transaksi',
-                            data: Array(13).fill(0),
+                            data: Array(24).fill(0),
                             borderColor: '#36a2eb',
                             backgroundColor: 'rgba(54,162,235,0.2)',
                             yAxisID: 'y1',
@@ -119,7 +119,7 @@
                         },
                         {
                             label: 'Jumlah Pembayaran (Rp)',
-                            data: Array(13).fill(0),
+                            data: Array(24).fill(0),
                             borderColor: '#4caf50',
                             backgroundColor: 'rgba(76,175,80,0.2)',
                             yAxisID: 'y2',
@@ -158,17 +158,17 @@
             monthlyChartInstance = new Chart(monthlyCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Bulan 1','Bulan 2','Bulan 3','Bulan 4','Bulan 5','Bulan 6','Bulan 7'],
+                    labels: ['This Month','Last Month','3 Months Ago','4 Months Ago','5 Months Ago', '6 Months Ago'],
                     datasets: [
                         {
                             label: 'Jumlah Transaksi',
-                            data: Array(7).fill(0),
+                            data: Array(6).fill(0),
                             backgroundColor: 'rgba(54,162,235,0.5)',
                             yAxisID: 'y1'
                         },
                         {
                             label: 'Jumlah Pembayaran (Rp)',
-                            data: Array(7).fill(0),
+                            data: Array(6).fill(0),
                             backgroundColor: 'rgba(76,175,80,0.5)',
                             yAxisID: 'y2'
                         }
@@ -210,11 +210,19 @@
                 document.getElementById('totalOut').textContent = data.total_transactions.out;
                 document.getElementById('valueIn').textContent = formatRupiah(data.total_value.in);
                 document.getElementById('valueOut').textContent = formatRupiah(data.total_value.out);
-                weeklyChartInstance.data.labels = data.growth.weekly.count.map((_, i) => `Minggu ${i + 1}`);
+                weeklyChartInstance.data.labels = data.growth.weekly.count.map((_, i) =>
+                    i === 0 ? 'This Week' :
+                    i === 1 ? 'Last Week' :
+                    `${i} Weeks Ago`
+                );
                 weeklyChartInstance.data.datasets[0].data = data.growth.weekly.count;
                 weeklyChartInstance.data.datasets[1].data = data.growth.weekly.amount;
                 weeklyChartInstance.update();
-                monthlyChartInstance.data.labels = data.growth.monthly.count.map((_, i) => `Bulan ${i + 1}`);
+                monthlyChartInstance.data.labels = data.growth.monthly.count.map((_, i) =>
+                    i === 0 ? 'This Month' :
+                    i === 1 ? 'Last Month' :
+                    `${i} Months Ago`
+                );
                 monthlyChartInstance.data.datasets[0].data = data.growth.monthly.count;
                 monthlyChartInstance.data.datasets[1].data = data.growth.monthly.amount;
                 monthlyChartInstance.update();
