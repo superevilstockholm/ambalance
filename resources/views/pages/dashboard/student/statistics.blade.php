@@ -106,7 +106,7 @@
             weeklyChartInstance = new Chart(weeklyCtx, {
                 type: 'line',
                 data: {
-                    labels: ['This Week','Last Week','3 Weeks Ago','4 Weeks Ago','5 Weeks Ago','6 Weeks Ago','7 Weeks Ago','8 Weeks Ago','9 Weeks Ago','10 Weeks Ago', '11 Weeks Ago', '12 Weeks Ago', '13 Weeks Ago', '14 Weeks Ago', '15 Weeks Ago', '16 Weeks Ago', '17 Weeks Ago', '18 Weeks Ago', '19 Weeks Ago', '20 Weeks Ago', '21 Weeks Ago', '22 Weeks Ago', '23 Weeks Ago', '24 Weeks Ago'],
+                    labels: ['This Week','Last Week','3 Weeks Ago','4 Weeks Ago','5 Weeks Ago','6 Weeks Ago','7 Weeks Ago','8 Weeks Ago','9 Weeks Ago','10 Weeks Ago', '11 Weeks Ago', '12 Weeks Ago', '13 Weeks Ago', '14 Weeks Ago', '15 Weeks Ago', '16 Weeks Ago', '17 Weeks Ago', '18 Weeks Ago', '19 Weeks Ago', '20 Weeks Ago', '21 Weeks Ago', '22 Weeks Ago', '23 Weeks Ago'],
                     datasets: [
                         {
                             label: 'Jumlah Transaksi',
@@ -158,7 +158,7 @@
             monthlyChartInstance = new Chart(monthlyCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['This Month','Last Month','3 Months Ago','4 Months Ago','5 Months Ago', '6 Months Ago'],
+                    labels: ['This Month','Last Month','2 Months Ago','3 Months Ago','4 Months Ago', '5 Months Ago'],
                     datasets: [
                         {
                             label: 'Jumlah Transaksi',
