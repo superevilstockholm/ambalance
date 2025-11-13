@@ -21,13 +21,16 @@
                         <option value="type">Type (In / Out)</option>
                         <option value="description">Description</option>
                         <option value="amount">Jumlah</option>
+                        <option value="date">Tanggal</option>
                     </select>
                     <label for="type">Search By</label>
                 </div>
-                <div class="form-floating w-100">
-                    <input type="text" class="form-control border-0 shadow-sm" name="query" id="query"
-                        placeholder="Cari riwayat tabungan">
-                    <label class="text-muted" for="query">Search</label>
+                <div class="flex-grow-1" id="dynamicInputContainer">
+                    <div class="form-floating w-100">
+                        <input type="text" class="form-control border-0 shadow-sm bg-white" name="query" id="query"
+                            placeholder="Cari riwayat tabungan" autocomplete="off">
+                        <label class="text-muted" for="query">Search</label>
+                    </div>
                 </div>
                 <button class="btn btn-primary border-0 shadow-sm" type="submit"><i class="ti ti-search"></i></button>
             </form>
@@ -142,16 +145,26 @@
             const form = document.getElementById('form-search');
             const limitElement = document.getElementById('limit');
             const limit = limitElement ? limitElement.value : 10;
-            const query = document.getElementById('query').value;
             const typeSearch = document.getElementById('type').value;
             const params = new URLSearchParams();
             params.append('page', page);
             params.append('limit', limit);
-            if (query) {
-                params.append('query', query);
-            }
-            if (typeSearch) {
-                params.append('type', typeSearch);
+            if (typeSearch === 'date') {
+                const startDate = document.getElementById('start_date')?.value;
+                const endDate = document.getElementById('end_date')?.value;
+                if (startDate && endDate) {
+                    params.append('type', 'date');
+                    params.append('start_date', startDate);
+                    params.append('end_date', endDate);
+                }
+            } else {
+                const query = document.getElementById('query')?.value;
+                if (query) {
+                    params.append('query', query);
+                }
+                if (typeSearch) {
+                    params.append('type', typeSearch);
+                }
             }
             container.innerHTML = `
                 <div class="text-center py-5">
@@ -255,6 +268,32 @@
             document.getElementById('limit').addEventListener('change', function() {
                 getSavingsHistory(1);
             });
+        });
+        const dynamicContainer = document.getElementById('dynamicInputContainer');
+        const typeSelect = document.getElementById('type');
+        typeSelect.addEventListener('change', function() {
+            if (this.value === 'date') {
+                dynamicContainer.innerHTML = `
+                    <div class="d-flex flex-column flex-md-row gap-2 w-100">
+                        <div class="form-floating flex-fill">
+                            <input type="date" class="form-control border-0 shadow-sm bg-white" name="start_date" id="start_date">
+                            <label for="start_date">Start Date</label>
+                        </div>
+                        <div class="form-floating flex-fill">
+                            <input type="date" class="form-control border-0 shadow-sm bg-white" name="end_date" id="end_date">
+                            <label for="end_date">End Date</label>
+                        </div>
+                    </div>
+                `;
+            } else {
+                dynamicContainer.innerHTML = `
+                    <div class="form-floating w-100">
+                        <input type="text" class="form-control border-0 shadow-sm bg-white" name="query" id="query"
+                            placeholder="Cari riwayat tabungan" autocomplete="off">
+                        <label class="text-muted" for="query">Search</label>
+                    </div>
+                `;
+            }
         });
     </script>
     <style>
