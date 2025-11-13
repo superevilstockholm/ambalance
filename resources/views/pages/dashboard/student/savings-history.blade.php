@@ -181,12 +181,12 @@
                         const formattedAmount = parseInt(item.amount).toLocaleString('id-ID');
                         return `
                             <tr>
-                                <td class="${amountClass}">${absoluteIndex}</td>
-                                <td class="${amountClass}">${item.description}</td>
-                                <td class="${amountClass}">${item.type === 'in' ? 'Masuk' : 'Keluar'}</td>
-                                <td class="${amountClass}"><strong>${amountSign} Rp${formattedAmount}</strong></td>
-                                <td class="${amountClass}">${item.teacher ? item.teacher.name : '<em class="text-muted">Tidak diketahui</em>'}</td>
-                                <td class="${amountClass}">${new Date(item.created_at).toLocaleString('id-ID')}</td>
+                                <td class="${amountClass} border-bottom">${absoluteIndex}</td>
+                                <td class="${amountClass} border-bottom">${item.description}</td>
+                                <td class="${amountClass} border-bottom">${item.type === 'in' ? 'Masuk' : 'Keluar'}</td>
+                                <td class="${amountClass} border-bottom"><strong>${amountSign} Rp${formattedAmount}</strong></td>
+                                <td class="${amountClass} border-bottom">${item.teacher ? item.teacher.name : '<em class="text-muted">Tidak diketahui</em>'}</td>
+                                <td class="${amountClass} border-bottom">${new Date(item.created_at).toLocaleString('id-ID')}</td>
                             </tr>
                         `;
                     }).join('');
@@ -201,12 +201,12 @@
                             <table class="table align-middle border-0">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Deskripsi</th>
-                                        <th>Type</th>
-                                        <th>Jumlah</th>
-                                        <th>Guru</th>
-                                        <th>Tanggal</th>
+                                        <th class="border-bottom">#</th>
+                                        <th class="border-bottom">Deskripsi</th>
+                                        <th class="border-bottom">Type</th>
+                                        <th class="border-bottom">Jumlah</th>
+                                        <th class="border-bottom">Guru</th>
+                                        <th class="border-bottom">Tanggal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
