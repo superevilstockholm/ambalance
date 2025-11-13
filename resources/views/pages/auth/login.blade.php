@@ -11,21 +11,29 @@
                 <div class="card border-0 py-4 p px-md-4">
                     <div class="card-body text-center">
                         <img style="max-height: 150px;" class="mb-4 w-100" src="{{ asset('static/images/vectors/undraw_savings.svg') }}" alt="Ambalance logo" fetchpriority="high">
-                        <h2 class="fw-bold mb-2">Welcome Back</h2>
-                        <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">Selamat datang kembali siswa, silahkan masuk dengan akun <a class="text-primary text-decoration-none fw-bold" href="{{ route('index') }}">Ambalance</a> kamu</p>
+                        <h2 class="fw-bold mb-2">{{ __('pages/auth/login.welcome_back') }}</h2>
+                        <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">
+                            {!! __('pages/auth/login.student_message', ['webname_link' => '<a class="text-primary text-decoration-none fw-bold" href="' . route('index') . '">' . __('pages/auth/login.webname_message') . '</a>']) !!}
+                        </p>
                         <form method="POST" id="studentForm">
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="text" name="nisn" id="nisn" placeholder="NISN" minlength="10" maxlength="10" autofocus required>
-                                <label class="fs-09" for="nisn">NISN</label>
+                                <label class="fs-09" for="nisn">{{ __('pages/auth/login.nisn') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="password" name="studentPassword" id="studentPassword" placeholder="Student Password" required>
-                                <label class="fs-09" for="studentPassword">Password</label>
+                                <label class="fs-09" for="studentPassword">{{ __('pages/auth/login.password') }}</label>
                             </div>
-                            <p class="text-end text-muted fs-09 mb-2">Lupa password? <a class="text-primary text-decoration-none fw-bold" href="#">Reset disini</a></p>
-                            <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">Log In</button>
-                            <p class="text-muted fs-09 mb-1">Belum punya akun? <a class="text-primary text-decoration-none fw-bold" href="{{ route('register') }}">Daftar disini</a></p>
-                            <p class="text-muted fs-09 mb-0">Kamu seorang guru? <span style="user-select: none !important;" class="p-0 text-primary text-decoration-none fw-bold fs-09" type="button" id="studentButton">Masuk disini</span></p>
+                            <p class="text-end text-muted fs-09 mb-2">
+                                {!! __('pages/auth/login.forgot_password_message', ['reset_password_link' => '<a class="text-primary text-decoration-none fw-bold" href="javascript:void(0);">' . __('pages/auth/login.reset_password_message') . '</a>']) !!}
+                            </p>
+                            <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">{{ __('pages/auth/login.login') }}</button>
+                            <p class="text-muted fs-09 mb-1">
+                                {!! __('pages/auth/login.dont_have_account_message', ['register_link' => '<a class="text-primary text-decoration-none fw-bold" href="' . route('register') . '">' . __('pages/auth/login.register_message') . '</a>']) !!}
+                            </p>
+                            <p class="text-muted fs-09 mb-1">
+                                {!! __('pages/auth/login.you_are_a_teacher_message', ['teacher_login_button' => '<a class="text-primary text-decoration-none fw-bold" href="javascript:void(0);" id="studentButton">' . __('pages/auth/login.teacher_login_message') . '</a>']) !!}
+                            </p>
                         </form>
                     </div>
                 </div>
@@ -41,21 +49,29 @@
                 <div class="card border-0 py-4 p px-md-4">
                     <div class="card-body text-center">
                         <img style="max-height: 150px;" loading="lazy" class="mb-4 w-100" src="{{ asset('static/images/vectors/undraw_savings.svg') }}" alt="Ambalance logo">
-                        <h2 class="fw-bold mb-2">Welcome Back</h2>
-                        <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">Selamat datang kembali guru, silahkan masuk dengan akun <a class="text-primary text-decoration-none fw-bold" href="{{ route('index') }}">Ambalance</a> kamu</p>
+                        <h2 class="fw-bold mb-2">{{ __('pages/auth/login.welcome_back') }}</h2>
+                        <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">
+                            {!! __('pages/auth/login.teacher_message', ['webname_link' => '<a class="text-primary text-decoration-none fw-bold" href="' . route('index') . '">' . __('pages/auth/login.webname_message') . '</a>']) !!}
+                        </p>
                         <form method="POST" id="teacherForm">
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="text" name="nip" id="nip" placeholder="NIP" minlength="18" maxlength="18" required>
-                                <label class="fs-09" for="nip">NIP</label>
+                                <label class="fs-09" for="nip">{{ __('pages/auth/login.nip') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="password" name="teacherPassword" id="teacherPassword" placeholder="Teacher Password" required>
-                                <label class="fs-09" for="teacherPassword">Password</label>
+                                <label class="fs-09" for="teacherPassword">{{ __('pages/auth/login.password') }}</label>
                             </div>
-                            <p class="text-end text-muted fs-09 mb-2">Lupa password? <a class="text-primary text-decoration-none fw-bold" href="#">Reset disini</a></p>
-                            <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">Log In</button>
-                            <p class="text-muted fs-09 mb-1">Belum punya akun? <a class="text-primary text-decoration-none fw-bold" href="{{ route('register') }}">Daftar disini</a></p>
-                            <p class="text-muted fs-09 mb-0">Kamu seorang siswa? <span style="user-select: none !important;" class="p-0 text-primary text-decoration-none fw-bold fs-09" type="button" id="teacherButton">Masuk disini</span></p>
+                            <p class="text-end text-muted fs-09 mb-2">
+                                {!! __('pages/auth/login.forgot_password_message', ['reset_password_link' => '<a class="text-primary text-decoration-none fw-bold" href="javascript:void(0);">' . __('pages/auth/login.reset_password_message') . '</a>']) !!}
+                            </p>
+                            <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">{{ __('pages/auth/login.login') }}</button>
+                            <p class="text-muted fs-09 mb-1">
+                                {!! __('pages/auth/login.dont_have_account_message', ['register_link' => '<a class="text-primary text-decoration-none fw-bold" href="' . route('register') . '">' . __('pages/auth/login.register_message') . '</a>']) !!}
+                            </p>
+                            <p class="text-muted fs-09 mb-0">
+                                {!! __('pages/auth/login.you_are_a_student_message', ['student_login_button' => '<a class="text-primary text-decoration-none fw-bold" href="javascript:void(0);" id="teacherButton">' . __('pages/auth/login.teacher_login_message') . '</a>']) !!}
+                            </p>
                         </form>
                     </div>
                 </div>
@@ -79,7 +95,7 @@
             if (response.status === 200 && response.data.status === true) {
                 await Swal.fire({
                     icon: 'success',
-                    title: 'Login Berhasil',
+                    title: "{{ __('pages/auth/login.login_success') }}",
                     text: response.data.message,
                     showConfirmButton: false,
                     timer: 1000
@@ -90,18 +106,18 @@
             }
             await Swal.fire({
                 icon: 'error',
-                title: 'Login Gagal',
-                text: response.data.message ?? 'Terjadi kesalahan!',
+                title: "{{ __('pages/auth/login.login_failed') }}",
+                text: response.data.message ?? "{{ __('pages/auth/login.error') }}",
                 showConfirmButton: true,
-                confirmButtonText: 'OK'
+                confirmButtonText: "{{ __('pages/auth/login.confirm_button') }}"
             });
         } catch (error) {
             await Swal.fire({
                 icon: 'error',
-                title: 'Login Gagal',
-                text: error.response?.data?.message ?? 'Terjadi kesalahan!',
+                title: "{{ __('pages/auth/login.login_failed') }}",
+                text: error.response?.data?.message ?? "{{ __('pages/auth/login.error') }}",
                 showConfirmButton: true,
-                confirmButtonText: 'OK'
+                confirmButtonText: "{{ __('pages/auth/login.confirm_button') }}"
             });
         }
     }
