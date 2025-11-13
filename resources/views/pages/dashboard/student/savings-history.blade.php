@@ -20,8 +20,9 @@
                         <option selected value="">- Select -</option>
                         <option value="type">Type (In / Out)</option>
                         <option value="description">Description</option>
+                        <option value="amount">Jumlah</option>
                     </select>
-                    <label for="type">Select Type</label>
+                    <label for="type">Search By</label>
                 </div>
                 <div class="form-floating w-100">
                     <input type="text" class="form-control border-0 shadow-sm" name="query" id="query"
