@@ -9,7 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 
 // Dashboard
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StudentDashboardController;
 
 // Notification
 use App\Http\Controllers\Settings\NotificationController;
@@ -21,6 +21,7 @@ Route::post('/admin-login', [AuthController::class, 'adminLogin']);
 
 // Protected routes
 Route::middleware(['auth:sanctum'])->group(function () {
+    // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::patch('/change-password', [AuthController::class, 'changePassword']);
 
@@ -29,16 +30,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'getUserProfile']);
     Route::patch('/profile', [ProfileController::class, 'editUserProfile']);
 
-    Route::get('/dashboard-data', [DashboardController::class, 'getStudentDashboardData']);
-
+    // Notification
     Route::get('/notifications', [NotificationController::class, 'getNotifications']);
     Route::patch('/notifications/{id}/read', [NotificationController::class, 'markNotificationAsRead']);
     Route::patch('/notifications/read-all', [NotificationController::class, 'markAllNotificationsAsRead']);
 
     // Protectetd - Role: Student
     Route::middleware(['role:student'])->group(function () {
-        Route::get('/savings-statistics', [DashboardController::class, 'getSavingsStatistics']);
-        Route::get('/savings-histories', [DashboardController::class, 'getSavingsHistories']);
+        Route::get('/dashboard-data', [StudentDashboardController::class, 'getStudentDashboardData']);
+        Route::get('/savings-statistics', [StudentDashboardController::class, 'getSavingsStatistics']);
+        Route::get('/savings-histories', [StudentDashboardController::class, 'getSavingsHistories']);
     });
 
     // Protectetd - Role: Teacher
