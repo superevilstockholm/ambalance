@@ -269,6 +269,7 @@
                 getSavingsHistory(1);
             });
         });
+
         const dynamicContainer = document.getElementById('dynamicInputContainer');
         const typeSelect = document.getElementById('type');
         typeSelect.addEventListener('change', function() {
@@ -283,6 +284,17 @@
                             <input type="date" class="form-control border-0 shadow-sm bg-white" name="end_date" id="end_date">
                             <label for="end_date">End Date</label>
                         </div>
+                    </div>
+                `;
+            } else if (this.value === 'type') {
+                dynamicContainer.innerHTML = `
+                    <div class="form-floating w-100">
+                        <select class="form-select border-0 shadow-sm bg-white" name="query" id="query">
+                            <option value="">- Pilih Tipe -</option>
+                            <option value="in">Masuk</option>
+                            <option value="out">Keluar</option>
+                        </select>
+                        <label for="query">Tipe Transaksi</label>
                     </div>
                 `;
             } else {
