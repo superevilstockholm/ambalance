@@ -171,7 +171,7 @@ class StudentDashboardController extends Controller
             ]);
 
             // Search
-            $allowedType = ['type', 'description'];
+            $allowedType = ['type', 'description', 'amount'];
             $type = $request->query('type');
 
             if ($type && $type === 'date') {
