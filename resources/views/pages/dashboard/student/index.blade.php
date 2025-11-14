@@ -1,7 +1,14 @@
 @extends('layouts.dashboard')
 @section('title', 'Dashboard Siswa - Ambalance')
-@section('meta-description', 'Dashboard interaktif untuk memoitoring tabungan siswa')
-@section('meta-keywords', 'Dashboard, Monitoring Tabungan, Tabungan Siswa, Siswa Sekolah')
+@if (App::isLocale('en'))
+    {{-- English --}}
+    @section('meta-description', 'Student Dashboard Overview: Check your current savings balance, total deposits and withdrawals, and view your latest transactions on Ambalance.')
+    @section('meta-keywords', 'student dashboard, savings overview, current balance, total transactions, Ambalance, student finance')
+@else
+    {{-- Default ID --}}
+    @section('meta-description', 'Selamat datang di Dashboard Siswa Ambalance. Cek ringkasan saldo tabungan Anda saat ini, jumlah total setoran dan penarikan, serta lihat transaksi terbaru Anda.')
+    @section('meta-keywords', 'dashboard siswa, saldo tabungan, ringkasan transaksi, total setoran, penarikan dana, Ambalance')
+@endif
 @section('content')
     <div class="row mb-3 mb-md-4">
         <div class="col mb-0">
