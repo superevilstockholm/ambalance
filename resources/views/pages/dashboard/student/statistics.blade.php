@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="avtar avtar-lg">
-                                <i class="text-white ti ti-credit-card"></i>
+                                <i class="text-white ti ti-arrow-up"></i>
                             </div>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="avtar avtar-lg">
-                                <i class="text-white ti ti-credit-card"></i>
+                                <i class="text-white ti ti-arrow-down"></i>
                             </div>
                         </div>
                     </div>
