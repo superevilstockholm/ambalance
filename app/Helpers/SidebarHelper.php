@@ -14,3 +14,17 @@ if (!function_exists('studentSidebarItems')) {
         ];
     }
 }
+
+if (!function_exists('teacherSidebarItems')) {
+    function teacherSidebarItems(): array
+    {
+        return [
+            'main' => [
+                ['icon' => 'ti ti-dashboard', 'label' => 'Dashboard', 'route' => 'teacher.dashboard'],
+            ],
+            'master data' => [
+                ['icon' => 'ti ti-users', 'label' => 'Siswa', 'route' => 'teacher.students'],
+            ],
+        ];
+    }
+}

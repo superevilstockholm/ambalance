@@ -55,7 +55,12 @@ class ProfileController extends Controller
                     'data' => $user
                 ], 200);
             } else if ($user->role === 'teacher') {
-
+                $user->load('teacher.classes');
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Get user profile successfully',
+                    'data' => $user
+                ], 200);
             } else if ($user->role === 'admin') {
 
             }
