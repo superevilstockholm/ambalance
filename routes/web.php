@@ -59,36 +59,36 @@ Route::middleware(['optional.auth.sanctum.cookie'])->group(function () {
 
 // Protected routes
 Route::middleware(['auth.sanctum.cookie'])->group(function () {
-    Route::prefix('student')->group(function () {
-        // Protectetd - Role: Student
-        Route::middleware(['role:student'])->group(function () {
-            Route::get('/', function () {
-                return view('pages.dashboard.student.index', [
-                    'meta' => ['sidebarItems' => studentSidebarItems()]
-                ]);
-            })->name('student.dashboard');
-            Route::get('/statistics', function () {
-                return view('pages.dashboard.student.statistics', [
-                    'meta' => ['sidebarItems' => studentSidebarItems()]
-                ]);
-            })->name('student.statistics');
-            Route::get('/savings-history', function () {
-                return view('pages.dashboard.student.savings-history', [
-                    'meta' => ['sidebarItems' => studentSidebarItems()]
-                ]);
-            })->name('student.savings-history');
-        });
+    // Protectetd - Role: Student
+    Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
+        Route::get('/', function () {
+            return view('pages.dashboard.student.index', [
+                'meta' => ['sidebarItems' => studentSidebarItems()]
+            ]);
+        })->name('dashboard');
+        Route::get('/statistics', function () {
+            return view('pages.dashboard.student.statistics', [
+                'meta' => ['sidebarItems' => studentSidebarItems()]
+            ]);
+        })->name('statistics');
+        Route::get('/savings-history', function () {
+            return view('pages.dashboard.student.savings-history', [
+                'meta' => ['sidebarItems' => studentSidebarItems()]
+            ]);
+        })->name('savings-history');
     });
-    Route::prefix('teacher')->group(function () {
-        // Protectetd - Role: Teacher
-        Route::middleware(['role:teacher'])->group(function () {
-            Route::get('/', function () {
-                return view('pages.dashboard.teacher.index');
-            })->name('teacher.dashboard');
-            Route::get('/students', function () {
-                return view('pages.dashboard.teacher.students');
-            })->name('teacher.students');
-        });
+    // Protectetd - Role: Teacher
+    Route::middleware(['role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
+        Route::get('/', function () {
+            return view('pages.dashboard.teacher.index', [
+                'meta' => ['sidebarItems' => teacherSidebarItems()]
+            ]);
+        })->name('dashboard');
+        Route::get('/students', function () {
+            return view('pages.dashboard.teacher.students', [
+                'meta' => ['sidebarItems' => teacherSidebarItems()]
+            ]);
+        })->name('students');
     });
     Route::prefix('admin')->group(function () {
         // Protectetd - Role: Admin

@@ -134,9 +134,9 @@
                             </p>
                         </div>
                         <div class="mb-2" style="padding-inline: 25px;">
-                            <label class="form-label fw-bold mb-0">NISN</label>
+                            <label class="form-label fw-bold mb-0" id="accountIDLabel"></label>
                             <p class="text-muted d-flex align-items-center gap-2">
-                                <span id="accountNISN"></span>
+                                <span id="accountID"></span>
                             </p>
                         </div>
                         <div class="mb-2" style="padding-inline: 25px;">
@@ -262,13 +262,32 @@
                 document.getElementById('accountProfilePicture').src = user.profile_picture_url ??
                     "{{ asset('static/images/default_profile.svg') }}";
                 document.querySelectorAll('.accountName').forEach(el => {
-                    el.textContent = user.student?.name ?? '-';
+                    if (user.role === 'student') {
+                        el.textContent = user.student?.name ?? '-';
+                    } else if (user.role === 'teacher') {
+                        el.textContent = user.teacher?.name ?? '-';
+                    }
                 });
                 document.getElementById('accountEmail').textContent = user.email ?? '-';
-                document.getElementById('accountNISN').textContent = user.student?.nisn ?? '-';
-                document.getElementById('accountClass').textContent = user.student?.class?.class_name ?? '-';
-                document.getElementById('accountDOB').textContent = user.student?.dob ? new Date(user.student.dob)
-                    .toLocaleDateString() : '-';
+                if (user.role === 'student') {
+                    document.getElementById('accountIDLabel').textContent = 'NISN';
+                    document.getElementById('accountID').textContent = user.student?.nisn ?? '-';
+                    document.getElementById('accountClass').textContent = user.student?.class?.class_name ?? '-';
+                    document.getElementById('accountDOB').textContent = user.student?.dob ? new Date(user.student.dob)
+                        .toLocaleDateString() : '-';
+                } else if (user.role === 'teacher') {
+                    document.getElementById('accountIDLabel').textContent = 'NIP';
+                    document.getElementById('accountID').textContent = user.teacher?.nip ?? '-';
+                    const classes = user.teacher?.classes ?? [];
+                    if (classes.length > 0) {
+                        document.getElementById('accountClass').textContent =
+                            classes.map(c => c.class_name).join(', ');
+                    } else {
+                        document.getElementById('accountClass').textContent = '-';
+                    }
+                    document.getElementById('accountDOB').textContent = user.teacher?.dob ? new Date(user.teacher.dob)
+                        .toLocaleDateString() : '-';
+                }
                 document.getElementById('accountRole').textContent = user.role ?? '-';
                 document.getElementById('accountEmailVerified').textContent = user.email_verified_at ?
                     new Date(user.email_verified_at).toLocaleString() :
@@ -516,9 +535,7 @@
                 '/api/profile',
                 formData, {
                     headers: {
-                        'Authorization': `Bearer ${getAuthToken()}`,
-                        'Content-Type': formData['type'] === 'email' ? 'application/json' :
-                            'multipart/form-data'
+                        'Authorization': `Bearer ${getAuthToken()}`
                     }
                 }
             );
@@ -643,7 +660,7 @@
                 changeUserProfile('email');
             });
         }
-        document.querySelector('.accountName').innerText = 'Nama Pengguna Contoh';
-        document.getElementById('accountEmail').innerText = 'email@contoh.com';
+        document.querySelector('.accountName').innerText = '';
+        document.getElementById('accountEmail').innerText = '';
     });
 </script>
