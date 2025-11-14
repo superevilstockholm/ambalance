@@ -477,8 +477,8 @@
         await markNotificationAsRead(notificationId, notifItem);
     });
     async function markAllNotificationsAsRead() {
+        const readAllButton = document.getElementById('readAllNotifications');
         try {
-            const readAllButton = document.getElementById('readAllNotifications');
             readAllButton.classList.add('disabled');
             const response = await axios.patch('/api/notifications/read-all', {}, {
                 headers: {

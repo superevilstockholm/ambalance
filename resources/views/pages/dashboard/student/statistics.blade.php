@@ -1,7 +1,14 @@
 @extends('layouts.dashboard')
 @section('title', 'Statistik - Ambalance')
-@section('meta-description', 'Statistik tabungan siswa di Ambalance')
-@section('meta-keywords', 'Statistik, Dashboard, Monitoring Tabungan, Tabungan Siswa, Siswa Sekolah')
+@if (App::isLocale('en'))
+    {{-- English --}}
+    @section('meta-description', 'View your personal savings statistics on Ambalance. Monitor total deposits, withdrawals, and track your weekly and monthly savings growth.')
+    @section('meta-keywords', 'savings statistics, student finance tracker, savings growth chart, Ambalance dashboard, transaction history summary')
+@else
+    {{-- Default ID --}}
+    @section('meta-description', 'Cek statistik tabungan pribadi Anda. Lihat ringkasan total transaksi masuk dan keluar serta pantau grafik pertumbuhan tabungan mingguan dan bulanan Anda di Ambalance.')
+    @section('meta-keywords', 'statistik tabungan, riwayat transaksi siswa, pertumbuhan tabungan, total saldo masuk, ambalance, data keuangan pribadi')
+@endif
 @section('content')
     <div class="row mb-3 mb-md-4">
         <div class="col">

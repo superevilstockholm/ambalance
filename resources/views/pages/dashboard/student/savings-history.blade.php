@@ -1,9 +1,14 @@
 @extends('layouts.dashboard')
 @section('title', 'Riwayat Tabungan - Ambalance')
-@section('meta-description', 'Riwayat tabungan siswa di Ambalance')
-@section('meta-keywords',
-    'Riwayat, Riwayat Tabungan, Log Tabungan, Dashboard, Monitoring Tabungan, Tabungan Siswa,
-    Siswa Sekolah')
+@if (App::isLocale('en'))
+    {{-- English --}}
+    @section('meta-description', 'View the complete transaction history for your student savings account on Ambalance. Filter and search all deposits and withdrawals easily.')
+    @section('meta-keywords', 'savings transaction history, student deposit log, withdrawal records, complete savings history, Ambalance student dashboard')
+@else
+    {{-- Default ID --}}
+    @section('meta-description', 'Lihat riwayat transaksi tabungan siswa secara lengkap, termasuk semua setoran dan penarikan. Cari dan filter data berdasarkan tipe, deskripsi, atau tanggal transaksi.')
+    @section('meta-keywords', 'riwayat tabungan siswa, daftar transaksi, setoran tabungan, penarikan dana, log transaksi, Ambalance')
+@endif
 @section('content')
     <div class="row mb-3">
         <div class="col-12 mb-2 mb-md-3">
