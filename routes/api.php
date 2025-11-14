@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 
 // Dashboard
 use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\TeacherDashboardController;
 
 // Notification
 use App\Http\Controllers\Settings\NotificationController;
@@ -44,7 +45,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Protectetd - Role: Teacher
     Route::middleware(['role:teacher'])->group(function () {
-
+        Route::get('/dashboard-data', [TeacherDashboardController::class, 'getTeacherDashboardData']);
     });
 
     // Protectetd - Role: Admin
