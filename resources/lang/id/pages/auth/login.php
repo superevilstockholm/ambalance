@@ -10,7 +10,7 @@ return [
     // Fields / Form
     'nisn' => 'NISN',
     'nip' => 'NIP',
-    'password' => 'Password',
+    'password' => 'Kata Sandi',
 
     // Tombol
     'login' => 'Masuk',

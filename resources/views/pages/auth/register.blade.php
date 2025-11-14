@@ -11,32 +11,38 @@
                 <div class="card border-0 py-4 p px-md-4">
                     <div class="card-body text-center">
                         <img style="max-height: 150px;" class="mb-4 w-100" src="{{ asset('static/images/vectors/undraw_welcome-cats.svg') }}" alt="Ambalance logo" fetchpriority="high">
-                        <h2 class="fw-bold mb-2">Welcome Aboard</h2>
-                        <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">Silahkan daftar untuk membuat akun <a class="text-primary text-decoration-none fw-bold" href="{{ route('index') }}">Ambalance</a> kamu</p>
+                        <h2 class="fw-bold mb-2">{{ __('pages/auth/register.welcome_aboard') }}</h2>
+                        <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">
+                            {!! __('pages/auth/register.student_message', ['webname_link' => '<a class="text-primary text-decoration-none fw-bold" href="' . route('index') . '">' . __('pages/auth/register.webname_message') . '</a>']) !!}
+                        </p>
                         <form method="POST" id="studentForm">
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="text" name="nisn" id="nisn" placeholder="NISN" minlength="10" maxlength="10" autofocus required>
-                                <label class="fs-09" for="nisn">NISN</label>
+                                <label class="fs-09" for="nisn">{{ __('pages/auth/register.nisn') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="date" name="studentDob" id="studentDob" placeholder="Date of Birth" required>
-                                <label class="fs-09" for="studentDob">Date of Birth</label>
+                                <label class="fs-09" for="studentDob">{{ __('pages/auth/register.dob') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="email" name="studentEmail" id="studentEmail" placeholder="Email" required>
-                                <label class="fs-09" for="studentEmail">Email</label>
+                                <label class="fs-09" for="studentEmail">{{ __('pages/auth/register.email') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="password" name="studentPassword" id="studentPassword" placeholder="Student Password" required>
-                                <label class="fs-09" for="studentPassword">Password</label>
+                                <label class="fs-09" for="studentPassword">{{ __('pages/auth/register.password') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="password" name="studentPasswordConfirmation" id="studentPasswordConfirmation" placeholder="Student Password Confirmation" required>
-                                <label class="fs-09" for="studentPasswordConfirmation">Password Confirmation</label>
+                                <label class="fs-09" for="studentPasswordConfirmation">{{ __('pages/auth/register.confirm_password') }}</label>
                             </div>
-                            <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">Sign In</button>
-                            <p class="text-muted fs-09 mb-1">Sudah punya akun? <a class="text-primary text-decoration-none fw-bold" href="{{ route('login') }}">Masuk disini</a></p>
-                            <p class="text-muted fs-09 mb-0">Kamu seorang guru? <span style="user-select: none !important;" class="p-0 text-primary text-decoration-none fw-bold fs-09" type="button" id="studentButton">Daftar disini</span></p>
+                            <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">{{ __('pages/auth/register.sign_up') }}</button>
+                            <p class="text-muted fs-09 mb-1">
+                                {!! __('pages/auth/register.already_have_an_account_message', ['login_link' => '<a class="text-primary text-decoration-none fw-bold" href="' . route('login') . '">' . __('pages/auth/register.login_message') . '</a>']) !!}
+                            </p>
+                            <p class="text-muted fs-09 mb-0">
+                                {!! __('pages/auth/register.you_are_a_teacher_message', ['teacher_register_button' => '<span style="user-select: none !important;" class="p-0 text-primary text-decoration-none fw-bold fs-09" type="button" id="studentButton">' . __('pages/auth/register.teacher_register_message') . '</span>']) !!}
+                            </p>
                         </form>
                     </div>
                 </div>
@@ -52,32 +58,38 @@
                 <div class="card border-0 py-4 p px-md-4">
                     <div class="card-body text-center">
                         <img style="max-height: 150px;" loading="lazy" class="mb-4 w-100" src="{{ asset('static/images/vectors/undraw_welcome-cats.svg') }}" alt="Ambalance logo">
-                        <h2 class="fw-bold mb-2">Welcome Aboard</h2>
-                        <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">Silahkan daftar untuk membuat akun <a class="text-primary text-decoration-none fw-bold" href="{{ route('index') }}">Ambalance</a> kamu</p>
+                        <h2 class="fw-bold mb-2">{{ __('pages/auth/register.welcome_aboard') }}</h2>
+                        <p class="text-muted mb-4 fw-medium fs-09 px-md-2 px-lg-4">
+                            {!! __('pages/auth/register.teacher_message', ['webname_link' => '<a class="text-primary text-decoration-none fw-bold" href="' . route('index') . '">' . __('pages/auth/register.webname_message') . '</a>']) !!}
+                        </p>
                         <form method="POST" id="teacherForm">
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="text" name="nip" id="nip" placeholder="NIP" minlength="18" maxlength="18" required>
-                                <label class="fs-09" for="nip">NIP</label>
+                                <label class="fs-09" for="nip">{{ __('pages/auth/register.nip') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="date" name="teacherDob" id="teacherDob" placeholder="Date of Birth" required>
-                                <label class="fs-09" for="teacherDob">Date of Birth</label>
+                                <label class="fs-09" for="teacherDob">{{ __('pages/auth/register.dob') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="email" name="teacherEmail" id="teacherEmail" placeholder="Email" required>
-                                <label class="fs-09" for="teacherEmail">Email</label>
+                                <label class="fs-09" for="teacherEmail">{{ __('pages/auth/register.email') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="password" name="teacherPassword" id="teacherPassword" placeholder="Teacher Password" required>
-                                <label class="fs-09" for="teacherPassword">Password</label>
+                                <label class="fs-09" for="teacherPassword">{{ __('pages/auth/register.password') }}</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <input class="form-control fs-09" type="password" name="teacherPasswordConfirmation" id="teacherPasswordConfirmation" placeholder="Teacher Password Confirmation" required>
-                                <label class="fs-09" for="teacherPasswordConfirmation">Password Confirmation</label>
+                                <label class="fs-09" for="teacherPasswordConfirmation">{{ __('pages/auth/register.confirm_password') }}</label>
                             </div>
-                            <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">Sign In</button>
-                            <p class="text-muted fs-09 mb-1">Sudah punya akun? <a class="text-primary text-decoration-none fw-bold" href="{{ route('login') }}">Masuk disini</a></p>
-                            <p class="text-muted fs-09 mb-0">Kamu seorang siswa? <span style="user-select: none !important;" class="p-0 text-primary text-decoration-none fw-bold fs-09" type="button" id="teacherButton">Daftar disini</span></p>
+                            <button class="btn btn-primary w-100 fs-09 mb-2" type="submit">{{ __('pages/auth/register.sign_up') }}</button>
+                            <p class="text-muted fs-09 mb-1">
+                                {!! __('pages/auth/register.already_have_an_account_message', ['login_link' => '<a class="text-primary text-decoration-none fw-bold" href="' . route('login') . '">' . __('pages/auth/register.login_message') . '</a>']) !!}
+                            </p>
+                            <p class="text-muted fs-09 mb-0">
+                                {!! __('pages/auth/register.you_are_a_student_message', ['student_register_button' => '<span style="user-select: none !important;" class="p-0 text-primary text-decoration-none fw-bold fs-09" type="button" id="teacherButton">' . __('pages/auth/register.teacher_register_message') . '</span>']) !!}
+                            </p>
                         </form>
                     </div>
                 </div>

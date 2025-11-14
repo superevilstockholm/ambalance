@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
 // Middlewares
+use App\Http\Middleware\SetLocaleMiddleware;
 use App\Http\Middleware\Auth\RoleMiddleware;
 use App\Http\Middleware\GzipAndMinifyMiddleware;
 use App\Http\Middleware\Auth\CookieBasedAuthSanctumMiddleware;
@@ -18,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web([
+            SetLocaleMiddleware::class,
+        ]);
         $middleware->use([
             GzipAndMinifyMiddleware::class,
         ]);
