@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Route;
 
 // Auth
 use App\Http\Controllers\AuthController;
-
 // Profile
 use App\Http\Controllers\ProfileController;
 
-// Dashboard
+//
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\TeacherDashboardController;
 
@@ -30,6 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/me', [ProfileController::class, 'getUser']);
     Route::get('/profile', [ProfileController::class, 'getUserProfile']);
     Route::patch('/profile', [ProfileController::class, 'editUserProfile']);
+    Route::get('/dashboard-data', [DashboardController::class, 'getDashboardData']);
 
     // Notification
     Route::get('/notifications', [NotificationController::class, 'getNotifications']);
@@ -38,14 +39,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Protectetd - Role: Student
     Route::middleware(['role:student'])->group(function () {
-        Route::get('/dashboard-data', [StudentDashboardController::class, 'getStudentDashboardData']);
         Route::get('/savings-statistics', [StudentDashboardController::class, 'getSavingsStatistics']);
         Route::get('/savings-histories', [StudentDashboardController::class, 'getSavingsHistories']);
     });
 
     // Protectetd - Role: Teacher
     Route::middleware(['role:teacher'])->group(function () {
-        Route::get('/dashboard-data', [TeacherDashboardController::class, 'getTeacherDashboardData']);
+
     });
 
     // Protectetd - Role: Admin
