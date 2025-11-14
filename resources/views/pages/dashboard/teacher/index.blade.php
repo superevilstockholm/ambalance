@@ -1,7 +1,14 @@
 @extends('layouts.dashboard')
 @section('title', 'Dashboard Guru - Ambalance')
-@section('meta-description', 'Dashboard interaktif untuk memoitoring tabungan siswa')
-@section('meta-keywords', 'Dashboard, Monitoring Tabungan, Tabungan Siswa, Siswa Sekolah')
+@if (App::isLocale('en'))
+    {{-- English --}}
+    @section('meta-description', 'Teacher Dashboard Overview: Get a quick summary of your class data, student list, and managed student savings balances in Ambalance.')
+    @section('meta-keywords', 'teacher dashboard, class overview, student data, student savings balance, Ambalance, teacher portal')
+@else
+    {{-- Default ID --}}
+    @section('meta-description', 'Selamat datang di Dashboard Guru Ambalance. Dapatkan ringkasan cepat data kelas, jumlah siswa, dan total saldo tabungan siswa yang Anda kelola.')
+    @section('meta-keywords', 'dashboard guru, ringkasan data kelas, data siswa, saldo tabungan, ambalance, portal guru')
+@endif
 @section('content')
     <div class="row mb-3 mb-md-4">
         <div class="col mb-0">
